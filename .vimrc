@@ -52,10 +52,16 @@ nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
 
 
-nnoremap <C-b> <C-^>
+
+"nnoremap <C-b> <C-^>
+nnoremap <space> <C-^>
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
 
-set dictionary+=~/.vim/verilogkeywords
+noremap j gj
+noremap k gk
+inoremap jk <esc>
+
+autocmd filetype verilog set dictionary+=~/.vim/verilogkeywords
