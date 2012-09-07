@@ -64,4 +64,41 @@ noremap j gj
 noremap k gk
 inoremap jk <esc>
 
-autocmd filetype verilog set dictionary+=~/.vim/verilogkeywords
+augroup filetype_verilog
+  autocmd!
+  autocmd filetype verilog set dictionary+=~/.vim/verilogkeywords
+augroup END
+
+nnoremap <leader>g :silent execute "grep! -R " . shellescape(expand("<cword>")) . " ."<cr>:copen<cr>
+"nnoremap <leader>g :set operatorfunc=GrepOperator<cr>g@
+"vnoremap <leader>g :<C-U>call GrepOperator(visualmode())<cr>
+
+function! GrepOperator(type)
+    if a:type ==# 'v'
+        execute "normal! `<v`>y"
+    elseif a:type ==# 'char'
+        execute "normal! `[v`]y"
+    else
+        return
+    endif
+
+    echom @@
+endfunction
+
+
+nnoremap <leader>b :call ToBin(expand("<cword>"))<cr>
+
+
+function! ToBin(no)
+  let yankold = @@
+  let temp = a:no * 1
+  let nextchar = 0
+  let str = ""
+  while temp != 0
+    let nextchar = temp % 2
+    let temp = temp / 2
+    let str = nextchar . str
+  endwhile
+  execute "normal! ciw".str
+  let @@ = yankold
+endfunction
