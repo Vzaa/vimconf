@@ -44,6 +44,8 @@ let mapleader=","
 
 map <leader>y "+y
 map <leader>p "+p
+map <leader><Right> $
+map <leader><Left> ^
 nnoremap <leader><space> :noh<cr>
 nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
 
