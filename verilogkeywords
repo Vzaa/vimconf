@@ -1,0 +1,16 @@
+always
+case
+if
+begin
+end
+posedge
+clk
+rst
+input
+output
+reg
+wire
+assign
+module
+endmodule
+endcase

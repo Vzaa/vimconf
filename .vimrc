@@ -33,6 +33,7 @@ set gdefault
 set backup
 set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+set undodir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 set wildmode=longest,list
 set hidden
 
@@ -64,6 +65,11 @@ nnoremap <C-l> <C-w>l
 
 noremap j gj
 noremap k gk
+noremap * *zz
+noremap # #zz
+noremap n nzz
+noremap N Nzz
+noremap <leader>o <C-w>o
 inoremap jk <esc>
 
 augroup filetype_verilog
@@ -71,7 +77,7 @@ augroup filetype_verilog
   autocmd filetype verilog set dictionary+=~/.vim/verilogkeywords
 augroup END
 
-nnoremap <leader>g :silent execute "grep! -R " . shellescape(expand("<cword>")) . " ."<cr>:copen<cr>
+"nnoremap <leader>g :silent execute "grep! -R " . shellescape(expand("<cword>")) . " ."<cr>:copen<cr>
 "nnoremap <leader>g :set operatorfunc=GrepOperator<cr>g@
 "vnoremap <leader>g :<C-U>call GrepOperator(visualmode())<cr>
 
@@ -104,3 +110,6 @@ function! ToBin(no)
   execute "normal! ciw".str
   let @@ = yankold
 endfunction
+
+
+let g:clang_user_options='|| exit 0'
