@@ -71,10 +71,14 @@ noremap n nzz
 noremap N Nzz
 noremap <leader>o <C-w>o
 inoremap jk <esc>
+inoremap {<cr> {<ESC>o}<ESC>O
+inoremap ( ()<ESC>i
+inoremap " ""<ESC>i
 
 augroup filetype_verilog
   autocmd!
   autocmd filetype verilog set dictionary+=~/.vim/verilogkeywords
+  autocmd filetype verilog inoremap begin<cr> begin<cr>end<esc>O
 augroup END
 
 "nnoremap <leader>g :silent execute "grep! -R " . shellescape(expand("<cword>")) . " ."<cr>:copen<cr>
