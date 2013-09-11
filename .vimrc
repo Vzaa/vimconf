@@ -11,7 +11,6 @@ colorscheme inkpot
 "colorscheme jellybeans
 "let g:CSApprox_attr_map = { 'bold' : 'bold', 'italic' : '', 'sp' : '' }
 
-
 set history=10000
 set wildmenu
 set mouse=a
