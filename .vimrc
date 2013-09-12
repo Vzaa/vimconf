@@ -110,10 +110,10 @@ noremap N Nzz
 noremap ]] ]]zz
 noremap [[ [[zz
 noremap <leader>o <C-w>o
-inoremap jk <esc>
+"inoremap jk <esc>
 inoremap {<cr> {<ESC>o}<ESC>O
-inoremap (<space> (<space>)<ESC>i
-inoremap "" ""<ESC>i
+"inoremap (<space> (<space>)<ESC>i
+"inoremap "" ""<ESC>i
 
 
 augroup filetype_verilog
