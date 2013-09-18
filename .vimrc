@@ -59,6 +59,7 @@ noremap ^ 0
 noremap 0 ^
 
 nnoremap <F6> :NERDTreeToggle<CR>
+nnoremap <F7> :GundoToggle<CR>
 
 map <leader>w bve"+y
 
