@@ -110,6 +110,8 @@ noremap n nzz
 noremap N Nzz
 noremap ]] ]]zz
 noremap [[ [[zz
+noremap {{ {{zz
+noremap }} }}zz
 noremap <leader>o <C-w>o
 "inoremap jk <esc>
 inoremap {<cr> {<ESC>o}<ESC>O
