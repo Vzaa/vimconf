@@ -28,6 +28,9 @@ set expandtab
 set scrolloff=3
 set nowrapscan
 
+set encoding utf-8
+set fileencoding utf-8
+
 set undofile
 set relativenumber
 "hi CursorColumn cterm=none ctermbg=black
