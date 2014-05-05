@@ -15,7 +15,6 @@ set history=10000
 set wildmenu
 set mouse=a
 set ignorecase smartcase
-"set number
 set tabstop=4
 set shiftwidth=4
 set incsearch
@@ -33,6 +32,7 @@ set fileencoding=utf-8
 
 set undofile
 set relativenumber
+set number
 "hi CursorColumn cterm=none ctermbg=black
 hi CursorLine cterm=none ctermbg=black
 set cursorline
