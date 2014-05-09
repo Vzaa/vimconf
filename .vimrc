@@ -75,13 +75,24 @@ nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
 
 set nosplitright
 
-nnoremap <leader>r :cs find 0 <C-R>=expand("<cword>")<CR><CR>zz
-nnoremap <leader>d :cs find 1 <C-R>=expand("<cword>")<CR><CR>zz
-nnoremap <leader>v :cs find 3 <C-R>=expand("<cword>")<CR><CR>zz
+set cscopequickfix=s-,c-,d-,i-,t-,e-,g-
 
-nnoremap <leader>R :vert scs find 0 <C-R>=expand("<cword>")<CR><CR>zz
-nnoremap <leader>D :vert scs find 1 <C-R>=expand("<cword>")<CR><CR>zz
-nnoremap <leader>V :vert scs find 3 <C-R>=expand("<cword>")<CR><CR>zz
+if has("cscope")
+    " add any database in current directory
+    if filereadable(".kscope/cscope.out")
+        cs add .kscope/cscope.out
+    endif
+endif
+
+
+
+nnoremap <leader>r :cs find 0 <C-R>=expand("<cword>")<CR><CR>zz :cope<CR><CR>
+nnoremap <leader>d :cs find 1 <C-R>=expand("<cword>")<CR><CR>zz :cope<CR><CR>
+nnoremap <leader>v :cs find 3 <C-R>=expand("<cword>")<CR><CR>zz :cope<CR><CR>
+
+nnoremap <leader>R :vert scs find 0 <C-R>=expand("<cword>")<CR><CR>zz :cope<CR><CR>
+nnoremap <leader>D :vert scs find 1 <C-R>=expand("<cword>")<CR><CR>zz :cope<CR><CR>
+nnoremap <leader>V :vert scs find 3 <C-R>=expand("<cword>")<CR><CR>zz :cope<CR><CR>
 
 "nnoremap <leader>r :vert rightb scs find 0 <C-R>=expand("<cword>")<CR><CR>zz
 "nnoremap <leader>d :vert rightb scs find 1 <C-R>=expand("<cword>")<CR><CR>zz
