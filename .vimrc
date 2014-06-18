@@ -178,6 +178,11 @@ function! ToBin(no)
   let @@ = yankold
 endfunction
 
+let g:UltiSnipsExpandTrigger="<c-a>"
+
+let g:syntastic_python_checkers = ['pyflakes']
+"let g:syntastic_python_checkers = ['pep8']
+
 
 
 
