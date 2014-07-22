@@ -5,8 +5,7 @@ if &t_Co > 2 || has("gui_running")
 endif
 
 set t_Co=256
-"set background=dark
-colorscheme inkpot
+"colorscheme inkpot
 "colorscheme gentooish
 "colorscheme jellybeans
 "let g:CSApprox_attr_map = { 'bold' : 'bold', 'italic' : '', 'sp' : '' }
@@ -185,6 +184,8 @@ let g:syntastic_python_checkers = ['pyflakes']
 
 
 
+set background=dark
+colorscheme gruvbox
 
 let g:clang_user_options='|| exit 0'
 "set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
