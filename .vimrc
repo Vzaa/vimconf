@@ -179,7 +179,9 @@ endfunction
 
 let g:UltiSnipsExpandTrigger="<c-a>"
 
+"let g:syntastic_python_checkers = ['pylint']
 let g:syntastic_python_checkers = ['pyflakes']
+"let g:syntastic_python_checkers = ['pyflakes']
 "let g:syntastic_python_checkers = ['pep8']
 
 
@@ -191,3 +193,13 @@ let g:clang_user_options='|| exit 0'
 "set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
 "hi StatusLine ctermbg=green  ctermfg=black
 
+" Maximize quickfix windows' width
+function! MaxQuickfixWin()
+    if &buftype ==# "quickfix"
+        execute "normal! \<c-w>J"
+    endif
+endfunction
+augroup MaxQuickfixWinGrp
+    autocmd!
+    autocmd BufWinEnter * call MaxQuickfixWin()
+augroup END
