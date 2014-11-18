@@ -16,6 +16,8 @@ set mouse=a
 set ignorecase smartcase
 set tabstop=4
 set shiftwidth=4
+set softtabstop=0
+set smarttab
 set incsearch
 set autoindent
 set smartindent
@@ -33,8 +35,8 @@ set undofile
 set relativenumber
 set number
 "hi CursorColumn cterm=none ctermbg=black
-hi CursorLine cterm=none ctermbg=black
-set cursorline
+"hi CursorLine cterm=none ctermbg=black
+"set cursorline
 "set cursorcolumn
 set showmatch
 set gdefault
@@ -203,3 +205,9 @@ augroup MaxQuickfixWinGrp
     autocmd!
     autocmd BufWinEnter * call MaxQuickfixWin()
 augroup END
+
+autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
+autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+
+highlight Highlighted ctermfg=231 ctermbg=24 cterm=NONE
+highlight! link CursorLineNr Highlighted
