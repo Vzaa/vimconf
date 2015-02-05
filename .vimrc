@@ -1,3 +1,37 @@
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
+
+Plugin 'vim-scripts/FuzzyFinder'
+Plugin 'vim-scripts/L9'
+Plugin 'tpope/vim-fugitive'
+Plugin 'kien/ctrlp.vim'
+Plugin 'scrooloose/nerdtree'
+Plugin 'bling/vim-airline.git'
+Plugin 'honza/vim-snippets.git'
+Plugin 'scrooloose/nerdcommenter.git'
+Plugin 'bling/vim-bufferline.git'
+Plugin 'sjl/gundo.vim'
+Plugin 'scrooloose/syntastic.git'
+Plugin 'Lokaltog/vim-easymotion'
+Plugin 'SirVer/ultisnips.git'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'pangloss/vim-javascript.git'
+Plugin 'godlygeek/tabular'
+Plugin 'morhetz/gruvbox'
+
+call vundle#end()            " required
+filetype plugin indent on    " required
+
+"""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""
 set nocompatible
 
 if &t_Co > 2 || has("gui_running")
@@ -5,10 +39,6 @@ if &t_Co > 2 || has("gui_running")
 endif
 
 set t_Co=256
-"colorscheme inkpot
-"colorscheme gentooish
-"colorscheme jellybeans
-"let g:CSApprox_attr_map = { 'bold' : 'bold', 'italic' : '', 'sp' : '' }
 
 set history=10000
 set wildmenu
@@ -34,17 +64,12 @@ set fileencoding=utf-8
 set undofile
 set relativenumber
 set number
-"hi CursorColumn cterm=none ctermbg=black
-"hi CursorLine cterm=none ctermbg=black
-"set cursorline
-"set cursorcolumn
 set showmatch
 set gdefault
 set backup
 set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 set undodir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
-"set wildmode=longest,list
 set hidden
 
 filetype plugin indent on
@@ -52,12 +77,6 @@ filetype plugin on
 set ofu=syntaxcomplete#Complete
 
 let mapleader=","
-
-
-execute pathogen#infect()
-
-"let g:clang_library_parth="/usr/lib"
-"let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
 
 noremap ^ 0
 noremap 0 ^
@@ -73,10 +92,12 @@ map <leader><Right> $
 map <leader><Left> ^
 nnoremap <leader><space> :noh<cr>
 nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
+nnoremap <leader>l :FufBufferTagAll<cr>
 
 set nosplitright
 
 set cscopequickfix=s-,c-,d-,i-,t-,e-,g-
+set cst
 
 if has("cscope")
     " add any database in current directory
@@ -84,7 +105,6 @@ if has("cscope")
         cs add .kscope/cscope.out
     endif
 endif
-
 
 
 nnoremap <leader>r :cs find 0 <C-R>=expand("<cword>")<CR><CR>zz :cope<CR><CR>
@@ -95,20 +115,9 @@ nnoremap <leader>R :vert scs find 0 <C-R>=expand("<cword>")<CR><CR>zz :cope<CR><
 nnoremap <leader>D :vert scs find 1 <C-R>=expand("<cword>")<CR><CR>zz :cope<CR><CR>
 nnoremap <leader>V :vert scs find 3 <C-R>=expand("<cword>")<CR><CR>zz :cope<CR><CR>
 
-"nnoremap <leader>r :vert rightb scs find 0 <C-R>=expand("<cword>")<CR><CR>zz
-"nnoremap <leader>d :vert rightb scs find 1 <C-R>=expand("<cword>")<CR><CR>zz
-"nnoremap <leader>c :vert rightb scs find 3 <C-R>=expand("<cword>")<CR><CR>zz
-
-"nnoremap <leader>r <C-W><C-O>:vert rightb scs find 0 <C-R>=expand("<cword>")<CR><CR>zz
-"nnoremap <leader>d <C-W><C-O>:vert rightb scs find 1 <C-R>=expand("<cword>")<CR><CR>zz
-"nnoremap <leader>c <C-W><C-O>:vert rightb scs find 3 <C-R>=expand("<cword>")<CR><CR>zz
-
-
 inoremap <F1> <ESC>
 nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
-
-
 
 "nnoremap <C-b> <C-^>
 nnoremap <space> <C-^>
@@ -130,61 +139,13 @@ noremap }} }}zz
 noremap <leader>o <C-w>o
 "inoremap jk <esc>
 inoremap {<cr> {<ESC>o}<ESC>O
-"inoremap (<space> (<space>)<ESC>i
-"inoremap "" ""<ESC>i
-
-
-augroup filetype_verilog
-  autocmd!
-  autocmd filetype verilog set dictionary+=~/.vim/verilogkeywords
-  autocmd filetype verilog inoremap begin<cr> begin<cr>end<esc>O
-augroup END
-
-augroup filetype_tex
-  autocmd!
-  autocmd filetype tex nnoremap <F5> :make<cr>:!gnome-open<space>rep.pdf<cr>:redraw!<cr>
-augroup END
-
-"nnoremap <leader>g :silent execute "grep! -R " . shellescape(expand("<cword>")) . " ."<cr>:copen<cr>
-"nnoremap <leader>g :set operatorfunc=GrepOperator<cr>g@
-"vnoremap <leader>g :<C-U>call GrepOperator(visualmode())<cr>
-
-function! GrepOperator(type)
-    if a:type ==# 'v'
-        execute "normal! `<v`>y"
-    elseif a:type ==# 'char'
-        execute "normal! `[v`]y"
-    else
-        return
-    endif
-
-    echom @@
-endfunction
-
-
-nnoremap <leader>b :call ToBin(expand("<cword>"))<cr>
-
-
-function! ToBin(no)
-  let yankold = @@
-  let temp = a:no * 1
-  let nextchar = 0
-  let str = ""
-  while temp != 0
-    let nextchar = temp % 2
-    let temp = temp / 2
-    let str = nextchar . str
-  endwhile
-  execute "normal! ciw".str
-  let @@ = yankold
-endfunction
 
 let g:UltiSnipsExpandTrigger="<c-a>"
 
 "let g:syntastic_python_checkers = ['pylint']
-let g:syntastic_python_checkers = ['pyflakes']
 "let g:syntastic_python_checkers = ['pyflakes']
-"let g:syntastic_python_checkers = ['pep8']
+"let g:syntastic_python_checkers = ['pyflakes']
+let g:syntastic_python_checkers = ['pep8']
 
 
 
