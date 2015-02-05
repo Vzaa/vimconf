@@ -26,6 +26,7 @@ Plugin 'Valloric/YouCompleteMe'
 Plugin 'pangloss/vim-javascript.git'
 Plugin 'godlygeek/tabular'
 Plugin 'morhetz/gruvbox'
+Plugin 'wting/rust.vim'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
