@@ -27,6 +27,13 @@ Plugin 'pangloss/vim-javascript.git'
 Plugin 'godlygeek/tabular'
 Plugin 'morhetz/gruvbox'
 Plugin 'wting/rust.vim'
+Plugin 'tmhedberg/matchit'
+Plugin 'Raimondi/delimitMate'
+Plugin 'vim-scripts/a.vim'
+Plugin 'xolox/vim-easytags'
+Plugin 'xolox/vim-misc'
+Plugin 'majutsushi/tagbar'
+Plugin 'mileszs/ack.vim'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -84,6 +91,7 @@ noremap 0 ^
 
 nnoremap <F6> :NERDTreeToggle<CR>
 nnoremap <F7> :GundoToggle<CR>
+nmap <F8> :TagbarToggle<CR>
 
 map <leader>w bve"+y
 
@@ -139,14 +147,14 @@ noremap {{ {{zz
 noremap }} }}zz
 noremap <leader>o <C-w>o
 "inoremap jk <esc>
-inoremap {<cr> {<ESC>o}<ESC>O
+"inoremap {<cr> {<ESC>o}<ESC>O
 
 let g:UltiSnipsExpandTrigger="<c-a>"
 
-"let g:syntastic_python_checkers = ['pylint']
+let g:syntastic_python_checkers = ['pylint']
 "let g:syntastic_python_checkers = ['pyflakes']
 "let g:syntastic_python_checkers = ['pyflakes']
-let g:syntastic_python_checkers = ['pep8']
+"let g:syntastic_python_checkers = ['pep8']
 
 
 
@@ -173,3 +181,10 @@ autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
 highlight Highlighted ctermfg=231 ctermbg=24 cterm=NONE
 highlight! link CursorLineNr Highlighted
+
+set tags=./tags;,~/.vimtags
+let g:easytags_events = ['BufReadPost', 'BufWritePost']
+let g:easytags_async = 1
+let g:easytags_dynamic_files = 2
+let g:easytags_resolve_links = 1
+let g:easytags_suppress_ctags_warning = 1
