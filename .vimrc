@@ -26,7 +26,7 @@ Plugin 'Valloric/YouCompleteMe'
 Plugin 'pangloss/vim-javascript.git'
 Plugin 'godlygeek/tabular'
 Plugin 'morhetz/gruvbox'
-Plugin 'wting/rust.vim'
+Plugin 'rust-lang/rust.vim'
 Plugin 'tmhedberg/matchit'
 Plugin 'Raimondi/delimitMate'
 Plugin 'vim-scripts/a.vim'
@@ -34,6 +34,8 @@ Plugin 'xolox/vim-easytags'
 Plugin 'xolox/vim-misc'
 Plugin 'majutsushi/tagbar'
 Plugin 'mileszs/ack.vim'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'maxbrunsfeld/vim-yankstack'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -123,6 +125,7 @@ nnoremap <leader>v :cs find 3 <C-R>=expand("<cword>")<CR><CR>zz :cope<CR><CR>
 nnoremap <leader>R :vert scs find 0 <C-R>=expand("<cword>")<CR><CR>zz :cope<CR><CR>
 nnoremap <leader>D :vert scs find 1 <C-R>=expand("<cword>")<CR><CR>zz :cope<CR><CR>
 nnoremap <leader>V :vert scs find 3 <C-R>=expand("<cword>")<CR><CR>zz :cope<CR><CR>
+nnoremap <leader>t :!rm -r .kscope; ~/newscope.sh ./<cr>:cs reset<cr>
 
 inoremap <F1> <ESC>
 nnoremap <F1> <ESC>
@@ -148,6 +151,8 @@ noremap }} }}zz
 noremap <leader>o <C-w>o
 "inoremap jk <esc>
 "inoremap {<cr> {<ESC>o}<ESC>O
+set <m-p>=p   " rotate yanks forward
+set <m-P>=P   " rotate yanks forward
 
 let g:UltiSnipsExpandTrigger="<c-a>"
 
@@ -155,6 +160,11 @@ let g:syntastic_python_checkers = ['pylint']
 "let g:syntastic_python_checkers = ['pyflakes']
 "let g:syntastic_python_checkers = ['pyflakes']
 "let g:syntastic_python_checkers = ['pep8']
+
+"let g:syntastic_jslint_checkers=['jslint']
+let g:syntastic_jslint_checkers=['jshint']
+let g:syntastic_check_on_open=1
+let g:syntastic_enable_signs=1
 
 
 
