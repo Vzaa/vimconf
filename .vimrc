@@ -9,7 +9,7 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
 
-Plugin 'vim-scripts/FuzzyFinder'
+"Plugin 'vim-scripts/FuzzyFinder'
 Plugin 'vim-scripts/L9'
 Plugin 'tpope/vim-fugitive'
 Plugin 'kien/ctrlp.vim'
@@ -17,7 +17,7 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'bling/vim-airline.git'
 Plugin 'honza/vim-snippets.git'
 Plugin 'scrooloose/nerdcommenter.git'
-Plugin 'bling/vim-bufferline.git'
+"Plugin 'bling/vim-bufferline.git'
 Plugin 'sjl/gundo.vim'
 Plugin 'scrooloose/syntastic.git'
 Plugin 'Lokaltog/vim-easymotion'
@@ -36,6 +36,7 @@ Plugin 'majutsushi/tagbar'
 Plugin 'mileszs/ack.vim'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'maxbrunsfeld/vim-yankstack'
+Plugin 'tpope/vim-surround'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -60,7 +61,7 @@ set softtabstop=0
 set smarttab
 set incsearch
 set autoindent
-set smartindent
+"set smartindent
 set title
 set hlsearch
 set ls=2
@@ -103,7 +104,9 @@ map <leader><Right> $
 map <leader><Left> ^
 nnoremap <leader><space> :noh<cr>
 nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
-nnoremap <leader>l :FufBufferTagAll<cr>
+"nnoremap <leader>l :FufBufferTagAll<cr>
+nnoremap <leader>l :CtrlPBufTagAll<cr>
+nnoremap <leader>b :CtrlPBuffer<cr>
 
 set nosplitright
 
@@ -198,3 +201,15 @@ let g:easytags_async = 1
 let g:easytags_dynamic_files = 2
 let g:easytags_resolve_links = 1
 let g:easytags_suppress_ctags_warning = 1
+
+"uncomment for regular fonts
+let g:airline_powerline_fonts = 1
+"show file name without the path
+let g:airline_section_c = '%t'
+"disable whitespace check
+let g:airline#extensions#whitespace#enabled = 0
+"show only column number and percentage
+let g:airline_section_z = '%3p%% %3v'
+
+"disable new line comments with o
+autocmd FileType * setlocal formatoptions-=o
