@@ -53,6 +53,7 @@ set t_Co=256
 
 set history=10000
 set wildmenu
+set wildmode=longest:full,full
 set mouse=a
 set ignorecase smartcase
 set tabstop=4
@@ -210,6 +211,21 @@ let g:airline_section_c = '%t'
 let g:airline#extensions#whitespace#enabled = 0
 "show only column number and percentage
 let g:airline_section_z = '%3p%% %3v'
+let g:airline_theme = 'wombat'
+let g:airline_mode_map = {
+            \ '__' : '-',
+            \ 'n'  : 'N',
+            \ 'i'  : 'I',
+            \ 'R'  : 'R',
+            \ 'c'  : 'C',
+            \ 'v'  : 'V',
+            \ 'V'  : 'V',
+            \ '' : 'V',
+            \ 's'  : 'S',
+            \ 'S'  : 'S',
+            \ '' : 'S',
+            \ }
+
 
 "disable new line comments with o
 autocmd FileType * setlocal formatoptions-=o
