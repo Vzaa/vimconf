@@ -37,6 +37,9 @@ Plugin 'mileszs/ack.vim'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'maxbrunsfeld/vim-yankstack'
 Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-dispatch'
+Plugin 'wellle/tmux-complete.vim'
+Plugin 'christoomey/vim-tmux-navigator'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -137,10 +140,10 @@ vnoremap <F1> <ESC>
 
 "nnoremap <C-b> <C-^>
 nnoremap <space> <C-^>
-nnoremap <C-h> <C-w>h
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-l> <C-w>l
+nnoremap <M-h> <C-w>h
+nnoremap <M-j> <C-w>j
+nnoremap <M-k> <C-w>k
+nnoremap <M-l> <C-w>l
 
 noremap j gj
 noremap k gk
@@ -240,3 +243,5 @@ function! AppendModeline()
   call append(line("$"), l:modeline)
 endfunction
 nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
+
+set diffopt+=iwhite
