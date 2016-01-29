@@ -9,12 +9,11 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
 
-"Plugin 'vim-scripts/FuzzyFinder'
 Plugin 'vim-scripts/L9'
 Plugin 'tpope/vim-fugitive'
 Plugin 'kien/ctrlp.vim'
 Plugin 'scrooloose/nerdtree'
-Plugin 'bling/vim-airline.git'
+Plugin 'vim-airline/vim-airline'
 Plugin 'honza/vim-snippets.git'
 Plugin 'scrooloose/nerdcommenter.git'
 "Plugin 'bling/vim-bufferline.git'
@@ -39,7 +38,8 @@ Plugin 'maxbrunsfeld/vim-yankstack'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-dispatch'
 Plugin 'wellle/tmux-complete.vim'
-Plugin 'christoomey/vim-tmux-navigator'
+"Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'ntpeters/vim-better-whitespace'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -100,15 +100,10 @@ nnoremap <F6> :NERDTreeToggle<CR>
 nnoremap <F7> :GundoToggle<CR>
 nmap <F8> :TagbarToggle<CR>
 
-map <leader>w bve"+y
-
 map <leader>y "+y
 map <leader>p "+p
-map <leader><Right> $
-map <leader><Left> ^
 nnoremap <leader><space> :noh<cr>
 nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
-"nnoremap <leader>l :FufBufferTagAll<cr>
 nnoremap <leader>l :CtrlPBufTagAll<cr>
 nnoremap <leader>b :CtrlPBuffer<cr>
 
@@ -125,25 +120,27 @@ if has("cscope")
 endif
 
 
-nnoremap <leader>r :cs find 0 <C-R>=expand("<cword>")<CR><CR>zz :cope<CR><CR>
-nnoremap <leader>d :cs find 1 <C-R>=expand("<cword>")<CR><CR>zz :cope<CR><CR>
-nnoremap <leader>v :cs find 3 <C-R>=expand("<cword>")<CR><CR>zz :cope<CR><CR>
+nnoremap <leader>r :cs find 0 <C-R>=expand("<cword>")<CR><CR>z<CR> :cope<CR><CR>
+nnoremap <leader>d :cs find 1 <C-R>=expand("<cword>")<CR><CR>z<CR> :cope<CR><CR>
+nnoremap <leader>v :cs find 3 <C-R>=expand("<cword>")<CR><CR>z<CR> :cope<CR><CR>
 
-nnoremap <leader>R :vert scs find 0 <C-R>=expand("<cword>")<CR><CR>zz :cope<CR><CR>
-nnoremap <leader>D :vert scs find 1 <C-R>=expand("<cword>")<CR><CR>zz :cope<CR><CR>
-nnoremap <leader>V :vert scs find 3 <C-R>=expand("<cword>")<CR><CR>zz :cope<CR><CR>
+nnoremap <leader>R :vert scs find 0 <C-R>=expand("<cword>")<CR><CR>z<CR> :cope<CR><CR>
+nnoremap <leader>D :vert scs find 1 <C-R>=expand("<cword>")<CR><CR>z<CR> :cope<CR><CR>
+nnoremap <leader>V :vert scs find 3 <C-R>=expand("<cword>")<CR><CR>z<CR> :cope<CR><CR>
 nnoremap <leader>t :!rm -r .kscope; ~/newscope.sh ./<cr>:cs reset<cr>
 
 inoremap <F1> <ESC>
 nnoremap <F1> <ESC>
 vnoremap <F1> <ESC>
 
-"nnoremap <C-b> <C-^>
 nnoremap <space> <C-^>
-nnoremap <M-h> <C-w>h
-nnoremap <M-j> <C-w>j
-nnoremap <M-k> <C-w>k
-nnoremap <M-l> <C-w>l
+nnoremap <c-h> <C-w>h
+nnoremap <c-j> <C-w>j
+nnoremap <c-k> <C-w>k
+nnoremap <c-l> <C-w>l
+
+cnoremap <c-n>  <down>
+cnoremap <c-p>  <up>
 
 noremap j gj
 noremap k gk
@@ -157,7 +154,6 @@ noremap {{ {{zz
 noremap }} }}zz
 noremap <leader>o <C-w>o
 "inoremap jk <esc>
-"inoremap {<cr> {<ESC>o}<ESC>O
 set <m-p>=p   " rotate yanks forward
 set <m-P>=P   " rotate yanks forward
 
@@ -173,14 +169,8 @@ let g:syntastic_jslint_checkers=['jshint']
 let g:syntastic_check_on_open=1
 let g:syntastic_enable_signs=1
 
-
-
 set background=dark
 colorscheme gruvbox
-
-let g:clang_user_options='|| exit 0'
-"set statusline=%t[%{strlen(&fenc)?&fenc:'none'},%{&ff}]%h%m%r%y%=%c,%l/%L\ %P
-"hi StatusLine ctermbg=green  ctermfg=black
 
 " Maximize quickfix windows' width
 function! MaxQuickfixWin()
@@ -199,19 +189,25 @@ autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 highlight Highlighted ctermfg=231 ctermbg=24 cterm=NONE
 highlight! link CursorLineNr Highlighted
 
+"easytags stuff
 set tags=~/.vimtags
 let g:easytags_events = ['BufReadPost', 'BufWritePost']
 let g:easytags_async = 1
 let g:easytags_dynamic_files = 2
 let g:easytags_resolve_links = 1
 let g:easytags_suppress_ctags_warning = 1
+"""""
 
+"vim-airline stuff
 "uncomment for regular fonts
 let g:airline_powerline_fonts = 1
+
 "show file name without the path
 let g:airline_section_c = '%t'
+
 "disable whitespace check
 let g:airline#extensions#whitespace#enabled = 0
+
 "show only column number and percentage
 let g:airline_section_z = '%3p%% %3v'
 let g:airline_theme = 'wombat'
@@ -228,6 +224,7 @@ let g:airline_mode_map = {
             \ 'S'  : 'S',
             \ '' : 'S',
             \ }
+"""""
 
 
 "disable new line comments with o
@@ -244,4 +241,11 @@ function! AppendModeline()
 endfunction
 nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
 
+"ignore whitespace in diffs
 set diffopt+=iwhite
+
+"reduce ESC delay
+set timeout           " for mappings
+set timeoutlen=1000   " default value
+set ttimeout          " for key codes
+set ttimeoutlen=10    " unnoticeable small value
