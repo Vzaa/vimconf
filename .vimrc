@@ -9,11 +9,12 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
 
-Plugin 'vim-scripts/L9'
+"Plugin 'vim-scripts/L9'
 Plugin 'tpope/vim-fugitive'
 Plugin 'kien/ctrlp.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 Plugin 'honza/vim-snippets.git'
 Plugin 'scrooloose/nerdcommenter.git'
 "Plugin 'bling/vim-bufferline.git'
@@ -207,10 +208,11 @@ let g:airline_section_c = '%t'
 
 "disable whitespace check
 let g:airline#extensions#whitespace#enabled = 0
+let g:airline#extensions#hunks#enabled = 0
 
 "show only column number and percentage
 let g:airline_section_z = '%3p%% %3v'
-let g:airline_theme = 'wombat'
+let g:airline_theme = 'light'
 let g:airline_mode_map = {
             \ '__' : '-',
             \ 'n'  : 'N',
