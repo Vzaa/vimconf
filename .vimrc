@@ -73,6 +73,8 @@ set ls=2
 set expandtab
 set scrolloff=3
 set nowrapscan
+set listchars=tab:>-,trail:-
+set list
 
 set encoding=utf-8
 set fileencoding=utf-8
@@ -87,6 +89,9 @@ set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 set undodir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 set hidden
+
+set lazyredraw
+set ttyfast
 
 filetype plugin indent on
 filetype plugin on
