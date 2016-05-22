@@ -29,9 +29,9 @@ Plugin 'morhetz/gruvbox'
 Plugin 'rust-lang/rust.vim'
 Plugin 'racer-rust/vim-racer'
 Plugin 'tmhedberg/matchit'
-Plugin 'Raimondi/delimitMate'
+"Plugin 'Raimondi/delimitMate'
 Plugin 'vim-scripts/a.vim'
-Plugin 'xolox/vim-easytags'
+"Plugin 'xolox/vim-easytags'
 Plugin 'xolox/vim-misc'
 Plugin 'majutsushi/tagbar'
 Plugin 'mileszs/ack.vim'
@@ -42,6 +42,8 @@ Plugin 'tpope/vim-dispatch'
 Plugin 'wellle/tmux-complete.vim'
 "Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'ntpeters/vim-better-whitespace'
+Plugin 'rdnetto/YCM-Generator'
+Plugin 'Superbil/llvm.vim'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -275,10 +277,10 @@ set <m-P>=P   " rotate yanks forward
 let g:UltiSnipsExpandTrigger="<c-a>"
 
 "syntastic checkers
-let g:syntastic_python_checkers = ['pylint']
+"let g:syntastic_python_checkers = ['pylint']
 "let g:syntastic_python_checkers = ['pyflakes']
 "let g:syntastic_python_checkers = ['pyflakes']
-"let g:syntastic_python_checkers = ['pep8']
+let g:syntastic_python_checkers = ['pep8']
 
 "let g:syntastic_jslint_checkers=['jslint']
 let g:syntastic_jslint_checkers=['jshint']
@@ -287,7 +289,7 @@ let g:syntastic_enable_signs=1
 
 "easytags stuff
 set tags=~/.vimtags
-let g:easytags_events = ['BufReadPost', 'BufWritePost']
+let g:easytags_events = ['BufWritePost']
 let g:easytags_async = 1
 let g:easytags_dynamic_files = 2
 let g:easytags_resolve_links = 1
