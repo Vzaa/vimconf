@@ -22,7 +22,7 @@ Plugin 'sjl/gundo.vim'
 Plugin 'scrooloose/syntastic.git'
 Plugin 'Lokaltog/vim-easymotion'
 Plugin 'SirVer/ultisnips.git'
-Plugin 'Valloric/YouCompleteMe'
+"Plugin 'Valloric/YouCompleteMe'
 Plugin 'pangloss/vim-javascript.git'
 Plugin 'godlygeek/tabular'
 Plugin 'morhetz/gruvbox'
@@ -43,7 +43,9 @@ Plugin 'wellle/tmux-complete.vim'
 "Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'ntpeters/vim-better-whitespace'
 Plugin 'rdnetto/YCM-Generator'
-Plugin 'Superbil/llvm.vim'
+"Plugin 'Superbil/llvm.vim'
+Plugin 'Shougo/neocomplete.vim'
+
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -81,8 +83,8 @@ set softtabstop=0
 set smarttab
 set expandtab
 
-"highlight tabs as >--, and trailing whitespace with -
-set listchars=tab:>-,trail:-
+"highlight tabs as >--, and trailing whitespace with -, spaw with .
+set listchars=tab:>-,trail:-,space:.
 set list
 
 "buffers remember their states
@@ -106,6 +108,9 @@ set number
 
 set autoindent
 "set smartindent
+
+"indent changes in C
+set cinoptions=l1,(4
 
 set title
 set ls=2
@@ -154,6 +159,7 @@ if has("cscope")
     " add any database in current directory
     if filereadable(".kscope/cscope.out")
         cs add .kscope/cscope.out
+        set tags+=.kscope/tags
     endif
 endif
 
@@ -266,6 +272,7 @@ nmap <F8> :TagbarToggle<CR>
 
 "Ctrl-P tag fuzzy search
 nnoremap <leader>l :CtrlPBufTagAll<cr>
+nnoremap <leader>L :CtrlPTag<cr>
 "Ctrl-P buffername fuzzy search
 nnoremap <leader>b :CtrlPBuffer<cr>
 
@@ -288,12 +295,12 @@ let g:syntastic_check_on_open=1
 let g:syntastic_enable_signs=1
 
 "easytags stuff
-set tags=~/.vimtags
-let g:easytags_events = ['BufWritePost']
-let g:easytags_async = 1
-let g:easytags_dynamic_files = 2
-let g:easytags_resolve_links = 1
-let g:easytags_suppress_ctags_warning = 1
+"set tags=~/.vimtags
+"let g:easytags_events = ['BufWritePost']
+"let g:easytags_async = 1
+"let g:easytags_dynamic_files = 2
+"let g:easytags_resolve_links = 1
+"let g:easytags_suppress_ctags_warning = 1
 """""
 
 "vim-airline stuff
