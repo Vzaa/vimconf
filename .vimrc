@@ -9,7 +9,6 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
 
-"Plugin 'vim-scripts/L9'
 Plugin 'tpope/vim-fugitive'
 Plugin 'kien/ctrlp.vim'
 Plugin 'scrooloose/nerdtree'
@@ -17,34 +16,32 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'honza/vim-snippets.git'
 Plugin 'scrooloose/nerdcommenter.git'
-"Plugin 'bling/vim-bufferline.git'
-Plugin 'sjl/gundo.vim'
+Plugin 'mbbill/undotree'
 Plugin 'scrooloose/syntastic.git'
 Plugin 'Lokaltog/vim-easymotion'
 Plugin 'SirVer/ultisnips.git'
-"Plugin 'Valloric/YouCompleteMe'
 Plugin 'pangloss/vim-javascript.git'
 Plugin 'godlygeek/tabular'
 Plugin 'morhetz/gruvbox'
-Plugin 'rust-lang/rust.vim'
-Plugin 'racer-rust/vim-racer'
-Plugin 'tmhedberg/matchit'
-"Plugin 'Raimondi/delimitMate'
+Plugin 'matchit.zip'
 Plugin 'vim-scripts/a.vim'
-"Plugin 'xolox/vim-easytags'
 Plugin 'xolox/vim-misc'
 Plugin 'majutsushi/tagbar'
-Plugin 'mileszs/ack.vim'
+Plugin 'mhinz/vim-grepper'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'maxbrunsfeld/vim-yankstack'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-dispatch'
 Plugin 'wellle/tmux-complete.vim'
-"Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'ntpeters/vim-better-whitespace'
-Plugin 'rdnetto/YCM-Generator'
-"Plugin 'Superbil/llvm.vim'
 Plugin 'Shougo/neocomplete.vim'
+Plugin 'rust-lang/rust.vim'
+Plugin 'racer-rust/vim-racer'
+"Plugin 'rdnetto/YCM-Generator'
+"Plugin 'vim-scripts/L9'
+"Plugin 'bling/vim-bufferline.git'
+"Plugin 'Valloric/YouCompleteMe'
+"Plugin 'Raimondi/delimitMate'
 
 
 call vundle#end()            " required
@@ -81,7 +78,7 @@ set tabstop=4
 set shiftwidth=4
 set softtabstop=0
 set smarttab
-set expandtab
+set et
 
 "highlight tabs as >--, and trailing whitespace with -, spaw with .
 set listchars=tab:>-,trail:-,space:.
@@ -267,7 +264,7 @@ autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 "plugin related configs start here
 
 nnoremap <F6> :NERDTreeToggle<CR>
-nnoremap <F7> :GundoToggle<CR>
+nnoremap <F7> :UndotreeToggle<CR>
 nmap <F8> :TagbarToggle<CR>
 
 "Ctrl-P tag fuzzy search
@@ -334,3 +331,9 @@ let g:airline_mode_map = {
 
 "racer config
 let g:racer_cmd = "racer"
+let $RUST_SRC_PATH="~/rust/src/"
+
+"enable neocomplete
+let g:neocomplete#enable_at_startup = 1
+
+command! -nargs=* -complete=file Rg Grepper -tool rg -query <args>
