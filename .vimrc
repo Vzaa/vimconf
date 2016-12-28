@@ -10,6 +10,7 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 Plugin 'tpope/vim-fugitive'
+Plugin 'morhetz/gruvbox'
 Plugin 'kien/ctrlp.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'vim-airline/vim-airline'
@@ -17,12 +18,10 @@ Plugin 'vim-airline/vim-airline-themes'
 Plugin 'honza/vim-snippets.git'
 Plugin 'scrooloose/nerdcommenter.git'
 Plugin 'mbbill/undotree'
-Plugin 'scrooloose/syntastic.git'
 Plugin 'Lokaltog/vim-easymotion'
 Plugin 'SirVer/ultisnips.git'
 Plugin 'pangloss/vim-javascript.git'
 Plugin 'godlygeek/tabular'
-Plugin 'morhetz/gruvbox'
 Plugin 'matchit.zip'
 Plugin 'vim-scripts/a.vim'
 Plugin 'xolox/vim-misc'
@@ -37,6 +36,7 @@ Plugin 'ntpeters/vim-better-whitespace'
 Plugin 'Shougo/neocomplete.vim'
 Plugin 'rust-lang/rust.vim'
 Plugin 'racer-rust/vim-racer'
+Plugin 'scrooloose/syntastic.git'
 "Plugin 'rdnetto/YCM-Generator'
 "Plugin 'vim-scripts/L9'
 "Plugin 'bling/vim-bufferline.git'
@@ -288,8 +288,15 @@ let g:syntastic_python_checkers = ['pep8']
 
 "let g:syntastic_jslint_checkers=['jslint']
 let g:syntastic_jslint_checkers=['jshint']
-let g:syntastic_check_on_open=1
-let g:syntastic_enable_signs=1
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 
 "easytags stuff
 "set tags=~/.vimtags
@@ -331,7 +338,6 @@ let g:airline_mode_map = {
 
 "racer config
 let g:racer_cmd = "racer"
-let $RUST_SRC_PATH="~/rust/src/"
 
 "enable neocomplete
 let g:neocomplete#enable_at_startup = 1
