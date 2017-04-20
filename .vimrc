@@ -37,6 +37,9 @@ Plugin 'Shougo/neocomplete.vim'
 Plugin 'rust-lang/rust.vim'
 Plugin 'racer-rust/vim-racer'
 Plugin 'scrooloose/syntastic.git'
+Plugin 'itchyny/vim-cursorword'
+Plugin 'Yggdroot/indentLine'
+Plugin 'Rip-Rip/clang_complete'
 "Plugin 'rdnetto/YCM-Generator'
 "Plugin 'vim-scripts/L9'
 "Plugin 'bling/vim-bufferline.git'
@@ -66,6 +69,8 @@ set wildmenu
 
 "proper tab completion behavior in command line
 set wildmode=longest:full,full
+"ignore binary files
+set wildignore+=*.o,*.a,*.so,*.class
 
 "mouse support
 set mouse=a
@@ -335,9 +340,6 @@ let g:airline_mode_map = {
             \ '' : 'S',
             \ }
 """""
-
-"racer config
-let g:racer_cmd = "racer"
 
 "enable neocomplete
 let g:neocomplete#enable_at_startup = 1
