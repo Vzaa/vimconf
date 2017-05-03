@@ -1,55 +1,45 @@
-set nocompatible              " be iMproved, required
-filetype off                  " required
+" Specify a directory for plugins (for Neovim: ~/.local/share/nvim/plugged)
+call plug#begin('~/.vim/plugged')
 
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
-
-" let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
-
-Plugin 'tpope/vim-fugitive'
-Plugin 'morhetz/gruvbox'
-Plugin 'kien/ctrlp.vim'
-Plugin 'scrooloose/nerdtree'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'honza/vim-snippets.git'
-Plugin 'scrooloose/nerdcommenter.git'
-Plugin 'mbbill/undotree'
-Plugin 'Lokaltog/vim-easymotion'
-Plugin 'SirVer/ultisnips.git'
-Plugin 'pangloss/vim-javascript.git'
-Plugin 'godlygeek/tabular'
-Plugin 'matchit.zip'
-Plugin 'vim-scripts/a.vim'
-Plugin 'xolox/vim-misc'
-Plugin 'majutsushi/tagbar'
-Plugin 'mhinz/vim-grepper'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'maxbrunsfeld/vim-yankstack'
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-dispatch'
-Plugin 'wellle/tmux-complete.vim'
-Plugin 'ntpeters/vim-better-whitespace'
-Plugin 'Shougo/neocomplete.vim'
-Plugin 'rust-lang/rust.vim'
-Plugin 'racer-rust/vim-racer'
-Plugin 'scrooloose/syntastic.git'
-Plugin 'itchyny/vim-cursorword'
-Plugin 'Yggdroot/indentLine'
-Plugin 'Rip-Rip/clang_complete'
+Plug 'tpope/vim-fugitive'
+Plug 'morhetz/gruvbox'
+Plug 'freeo/vim-kalisi'
+Plug 'kien/ctrlp.vim'
+Plug 'scrooloose/nerdtree'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'honza/vim-snippets'
+Plug 'scrooloose/nerdcommenter'
+Plug 'mbbill/undotree'
+Plug 'Lokaltog/vim-easymotion'
+Plug 'SirVer/ultisnips'
+Plug 'pangloss/vim-javascript'
+Plug 'godlygeek/tabular'
+" Plug 'matchit.zip'
+Plug 'vim-scripts/a.vim'
+Plug 'xolox/vim-misc'
+Plug 'majutsushi/tagbar'
+Plug 'mhinz/vim-grepper'
+Plug 'airblade/vim-gitgutter'
+Plug 'maxbrunsfeld/vim-yankstack'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-dispatch'
+Plug 'wellle/tmux-complete.vim'
+Plug 'ntpeters/vim-better-whitespace'
+Plug 'Shougo/neocomplete.vim'
+Plug 'rust-lang/rust.vim'
+Plug 'racer-rust/vim-racer'
+Plug 'scrooloose/syntastic'
+Plug 'itchyny/vim-cursorword'
+Plug 'Yggdroot/indentLine'
+Plug 'Rip-Rip/clang_complete'
 "Plugin 'rdnetto/YCM-Generator'
 "Plugin 'vim-scripts/L9'
 "Plugin 'bling/vim-bufferline.git'
 "Plugin 'Valloric/YouCompleteMe'
 "Plugin 'Raimondi/delimitMate'
 
-
-call vundle#end()            " required
-filetype plugin indent on    " required
-
+call plug#end()
 """""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""
 set nocompatible
@@ -219,8 +209,9 @@ noremap k gk
 "center after certain movements
 noremap * *zz
 noremap # #zz
-noremap n nzz
-noremap N Nzz
+"n always moves forward
+noremap <expr> n (v:searchforward ? 'nzz' : 'Nzz')
+noremap <expr> N (v:searchforward ? 'Nzz' : 'nzz')
 noremap ]] ]]zz
 noremap [[ [[zz
 noremap {{ {{zz
