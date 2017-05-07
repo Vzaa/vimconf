@@ -26,12 +26,17 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-dispatch'
 Plug 'wellle/tmux-complete.vim'
 Plug 'ntpeters/vim-better-whitespace'
-Plug 'Shougo/neocomplete.vim'
+if has("nvim")
+	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+	Plug 'w0rp/ale'
+else
+	Plug 'Shougo/neocomplete.vim'
+	Plug 'scrooloose/syntastic'
+endif
 Plug 'rust-lang/rust.vim'
 Plug 'racer-rust/vim-racer'
-Plug 'scrooloose/syntastic'
 Plug 'itchyny/vim-cursorword'
-Plug 'Yggdroot/indentLine'
+"Plug 'Yggdroot/indentLine'
 Plug 'Rip-Rip/clang_complete'
 "Plugin 'rdnetto/YCM-Generator'
 "Plugin 'vim-scripts/L9'
@@ -217,6 +222,10 @@ noremap [[ [[zz
 noremap {{ {{zz
 noremap }} }}zz
 
+if has("nvim")
+	tnoremap <Esc> <C-\><C-n>
+endif
+
 "jk to go to normal mode
 "inoremap jk <esc>
 
@@ -270,8 +279,11 @@ nnoremap <leader>L :CtrlPTag<cr>
 nnoremap <leader>b :CtrlPBuffer<cr>
 
 "emacs like shortcuts for yankstack
-set <m-p>=p   " rotate yanks forward
-set <m-P>=P   " rotate yanks forward
+if has("nvim")
+else
+	set <m-p>=p   " rotate yanks forward
+	set <m-P>=P   " rotate yanks forward
+endif
 
 "custom trigger for snippets
 let g:UltiSnipsExpandTrigger="<c-a>"
@@ -280,19 +292,19 @@ let g:UltiSnipsExpandTrigger="<c-a>"
 "let g:syntastic_python_checkers = ['pylint']
 "let g:syntastic_python_checkers = ['pyflakes']
 "let g:syntastic_python_checkers = ['pyflakes']
-let g:syntastic_python_checkers = ['pep8']
+"let g:syntastic_python_checkers = ['pep8']
 
 "let g:syntastic_jslint_checkers=['jslint']
-let g:syntastic_jslint_checkers=['jshint']
+"let g:syntastic_jslint_checkers=['jshint']
 
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
 
 "easytags stuff
 "set tags=~/.vimtags
@@ -305,7 +317,7 @@ let g:syntastic_check_on_wq = 0
 
 "vim-airline stuff
 "uncomment for regular fonts
-let g:airline_powerline_fonts = 1
+"let g:airline_powerline_fonts = 1
 
 "show file name without the path
 let g:airline_section_c = '%t'
@@ -333,6 +345,10 @@ let g:airline_mode_map = {
 """""
 
 "enable neocomplete
-let g:neocomplete#enable_at_startup = 1
+if has("nvim")
+	let g:deoplete#enable_at_startup = 1
+else
+	let g:neocomplete#enable_at_startup = 1
+endif
 
 command! -nargs=* -complete=file Rg Grepper -tool rg -query <args>
