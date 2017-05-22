@@ -5,6 +5,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'morhetz/gruvbox'
 Plug 'freeo/vim-kalisi'
 Plug 'kien/ctrlp.vim'
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'scrooloose/nerdtree'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -273,6 +274,8 @@ nnoremap <F7> :UndotreeToggle<CR>
 nmap <F8> :TagbarToggle<CR>
 
 "Ctrl-P tag fuzzy search
+let g:ctrlp_map = ''
+nnoremap <c-p> :FZF<cr>
 nnoremap <leader>l :CtrlPBufTagAll<cr>
 nnoremap <leader>L :CtrlPTag<cr>
 "Ctrl-P buffername fuzzy search
