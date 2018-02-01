@@ -27,6 +27,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-dispatch'
 Plug 'wellle/tmux-complete.vim'
 Plug 'ntpeters/vim-better-whitespace'
+Plug 'leafgarland/typescript-vim'
 if has("nvim")
 	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 	Plug 'w0rp/ale'
@@ -68,6 +69,9 @@ set wildmode=longest:full,full
 "ignore binary files
 set wildignore+=*.o,*.a,*.so,*.class
 
+"make gf recursive
+set path+=**
+
 "mouse support
 set mouse=a
 
@@ -81,8 +85,12 @@ set softtabstop=0
 set smarttab
 set et
 
+if has("nvim")
+	set icm=nosplit
+endif
+
 "highlight tabs as >--, and trailing whitespace with -, spaw with .
-set listchars=tab:>-,trail:-,space:.
+set listchars=tab:>-,trail:-
 set list
 
 "buffers remember their states
@@ -134,6 +142,8 @@ set undodir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 set lazyredraw
 set ttyfast
 
+"manual folding
+set foldmethod=manual
 
 "reduce ESC delay
 set timeout           " for mappings
@@ -220,8 +230,15 @@ noremap <expr> n (v:searchforward ? 'nzz' : 'Nzz')
 noremap <expr> N (v:searchforward ? 'Nzz' : 'nzz')
 noremap ]] ]]zz
 noremap [[ [[zz
-noremap {{ {{zz
-noremap }} }}zz
+noremap { {{zz
+noremap } }}zz
+nnoremap <BS> {
+onoremap <BS> {
+vnoremap <BS> {
+
+nnoremap <expr> <CR> empty(&buftype) ? '}' : '<CR>'
+onoremap <expr> <CR> empty(&buftype) ? '}' : '<CR>'
+vnoremap <CR> }
 
 if has("nvim")
 	tnoremap <Esc> <C-\><C-n>
@@ -323,7 +340,7 @@ set statusline+=%*
 "let g:airline_powerline_fonts = 1
 
 "show file name without the path
-let g:airline_section_c = '%t'
+"let g:airline_section_c = '%t'
 
 "disable whitespace check
 let g:airline#extensions#whitespace#enabled = 0
