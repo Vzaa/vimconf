@@ -6,6 +6,7 @@ Plug 'morhetz/gruvbox'
 Plug 'freeo/vim-kalisi'
 Plug 'kien/ctrlp.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -19,7 +20,7 @@ Plug 'godlygeek/tabular'
 " Plug 'matchit.zip'
 Plug 'vim-scripts/a.vim'
 Plug 'xolox/vim-misc'
-Plug 'majutsushi/tagbar'
+"Plug 'majutsushi/tagbar'
 Plug 'mhinz/vim-grepper'
 Plug 'airblade/vim-gitgutter'
 Plug 'maxbrunsfeld/vim-yankstack'
@@ -45,6 +46,7 @@ Plug 'Rip-Rip/clang_complete'
 "Plugin 'bling/vim-bufferline.git'
 "Plugin 'Valloric/YouCompleteMe'
 "Plugin 'Raimondi/delimitMate'
+Plug 'zchee/deoplete-jedi'
 
 call plug#end()
 """""""""""""""""""""""""""""""
@@ -288,7 +290,7 @@ autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
 nnoremap <F6> :NERDTreeToggle<CR>
 nnoremap <F7> :UndotreeToggle<CR>
-nmap <F8> :TagbarToggle<CR>
+"nmap <F8> :TagbarToggle<CR>
 
 "Ctrl-P tag fuzzy search
 let g:ctrlp_map = ''
