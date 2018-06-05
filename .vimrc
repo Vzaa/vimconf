@@ -14,7 +14,6 @@ Plug 'honza/vim-snippets'
 Plug 'scrooloose/nerdcommenter'
 Plug 'mbbill/undotree'
 Plug 'Lokaltog/vim-easymotion'
-Plug 'SirVer/ultisnips'
 Plug 'pangloss/vim-javascript'
 Plug 'godlygeek/tabular'
 " Plug 'matchit.zip'
@@ -25,13 +24,18 @@ Plug 'mhinz/vim-grepper'
 Plug 'airblade/vim-gitgutter'
 Plug 'maxbrunsfeld/vim-yankstack'
 Plug 'tpope/vim-surround'
-Plug 'tpope/vim-dispatch'
+"Plug 'tpope/vim-dispatch'
 Plug 'wellle/tmux-complete.vim'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'leafgarland/typescript-vim'
 if has("nvim")
+	Plug 'SirVer/ultisnips'
 	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 	Plug 'w0rp/ale'
+	Plug 'autozimu/LanguageClient-neovim', {
+		\ 'branch': 'next',
+		\ 'do': 'bash install.sh',
+		\ }
 else
 	Plug 'Shougo/neocomplete.vim'
 	Plug 'scrooloose/syntastic'
@@ -46,6 +50,8 @@ Plug 'Rip-Rip/clang_complete'
 "Plugin 'bling/vim-bufferline.git'
 "Plugin 'Valloric/YouCompleteMe'
 "Plugin 'Raimondi/delimitMate'
+"Plug 'rhysd/vim-clang-format'
+"Plug 'artur-shaik/vim-javacomplete2'
 Plug 'zchee/deoplete-jedi'
 
 call plug#end()
@@ -374,3 +380,9 @@ else
 endif
 
 command! -nargs=* -complete=file Rg Grepper -tool rg -query <args>
+
+let g:LanguageClient_autoStart = 1
+let g:ale_linters = {'rust': ['rls']}
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['rls'],
+    \ }
