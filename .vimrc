@@ -3,8 +3,8 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'tpope/vim-fugitive'
 Plug 'morhetz/gruvbox'
-Plug 'freeo/vim-kalisi'
-Plug 'kien/ctrlp.vim'
+"Plug 'freeo/vim-kalisi'
+"Plug 'kien/ctrlp.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
@@ -28,6 +28,7 @@ Plug 'tpope/vim-surround'
 Plug 'wellle/tmux-complete.vim'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'leafgarland/typescript-vim'
+Plug 'jiangmiao/auto-pairs'
 if has("nvim")
 	Plug 'SirVer/ultisnips'
 	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -41,10 +42,10 @@ else
 	Plug 'scrooloose/syntastic'
 endif
 Plug 'rust-lang/rust.vim'
-Plug 'racer-rust/vim-racer'
+"Plug 'racer-rust/vim-racer'
 Plug 'itchyny/vim-cursorword'
 "Plug 'Yggdroot/indentLine'
-Plug 'Rip-Rip/clang_complete'
+"Plug 'Rip-Rip/clang_complete'
 "Plugin 'rdnetto/YCM-Generator'
 "Plugin 'vim-scripts/L9'
 "Plugin 'bling/vim-bufferline.git'
@@ -52,7 +53,7 @@ Plug 'Rip-Rip/clang_complete'
 "Plugin 'Raimondi/delimitMate'
 "Plug 'rhysd/vim-clang-format'
 "Plug 'artur-shaik/vim-javacomplete2'
-Plug 'zchee/deoplete-jedi'
+"Plug 'zchee/deoplete-jedi'
 
 call plug#end()
 """""""""""""""""""""""""""""""
@@ -124,7 +125,7 @@ set autoindent
 "set smartindent
 
 "indent changes in C
-set cinoptions=l1,(4
+set cinoptions=:0,l1,t0,g0,(0
 
 set title
 set ls=2
@@ -298,13 +299,12 @@ nnoremap <F6> :NERDTreeToggle<CR>
 nnoremap <F7> :UndotreeToggle<CR>
 "nmap <F8> :TagbarToggle<CR>
 
-"Ctrl-P tag fuzzy search
-let g:ctrlp_map = ''
 nnoremap <c-p> :FZF<cr>
-nnoremap <leader>l :CtrlPBufTagAll<cr>
-nnoremap <leader>L :CtrlPTag<cr>
-"Ctrl-P buffername fuzzy search
-nnoremap <leader>b :CtrlPBuffer<cr>
+nnoremap <leader>l :BTags<cr>
+nnoremap <leader>L :Tags<cr>
+nnoremap <leader>f :BLines<cr>
+nnoremap <leader>F :Lines<cr>
+nnoremap <leader>b :Buffers<cr>
 
 "emacs like shortcuts for yankstack
 if has("nvim")
@@ -372,17 +372,72 @@ let g:airline_mode_map = {
             \ }
 """""
 
-"enable neocomplete
+"enable completion
 if has("nvim")
 	let g:deoplete#enable_at_startup = 1
 else
 	let g:neocomplete#enable_at_startup = 1
 endif
 
-command! -nargs=* -complete=file Rg Grepper -tool rg -query <args>
+command! -nargs=* -complete=file Rg GrepperRg <args>
 
-let g:LanguageClient_autoStart = 1
-let g:ale_linters = {'rust': ['rls']}
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['rls'],
+    \ 'python': ['pyls'],
+    \ 'cpp': ['cquery', '--log-file=/tmp/cq.log'],
+    \ 'c': ['cquery', '--log-file=/tmp/cq.log'],
     \ }
+
+let g:LanguageClient_diagnosticsList="Location"
+let g:LanguageClient_loadSettings = 1
+let g:LanguageClient_settingsPath = '~/.vim/settings.json'
+let g:LanguageClient_autoStart = 1
+
+nnoremap <F9> :call LanguageClient_contextMenu()<CR>
+
+autocmd FileType rust nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+autocmd FileType rust nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+autocmd FileType python nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
+autocmd FileType python nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+
+" AutoPairs stuff
+let g:AutoPairsShortcutToggle = '<M-o>'
+let g:AutoPairsMapCR=0
+
+imap jk <Esc>
+imap kj <Esc>
+
+"""""""
+" fix from: https://github.com/autozimu/LanguageClient-neovim/issues/379
+function! ExpandLspSnippet()
+    call UltiSnips#ExpandSnippetOrJump()
+    if !pumvisible() || empty(v:completed_item)
+        return ''
+    endif
+
+    " only expand Lsp if UltiSnips#ExpandSnippetOrJump not effect.
+    let l:value = v:completed_item['word']
+    let l:matched = len(l:value)
+    if l:matched <= 0
+        return ''
+    endif
+
+    " remove inserted chars before expand snippet
+    if col('.') == col('$')
+        let l:matched -= 1
+        exec 'normal! ' . l:matched . 'Xx'
+    else
+        exec 'normal! ' . l:matched . 'X'
+    endif
+
+    if col('.') == col('$') - 1
+        " move to $ if at the end of line.
+        call cursor(line('.'), col('$'))
+    endif
+
+    " expand snippet now.
+    call UltiSnips#Anon(l:value)
+    return ''
+endfunction
+
+imap <C-k> <C-R>=ExpandLspSnippet()<CR>
