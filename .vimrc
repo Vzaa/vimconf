@@ -8,6 +8,7 @@ Plug 'morhetz/gruvbox'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'honza/vim-snippets'
@@ -28,18 +29,21 @@ Plug 'tpope/vim-surround'
 Plug 'wellle/tmux-complete.vim'
 Plug 'ntpeters/vim-better-whitespace'
 Plug 'leafgarland/typescript-vim'
-Plug 'jiangmiao/auto-pairs'
+Plug 'posva/vim-vue'
+"Plug 'jiangmiao/auto-pairs'
 if has("nvim")
-	Plug 'SirVer/ultisnips'
-	Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-	Plug 'w0rp/ale'
-	Plug 'autozimu/LanguageClient-neovim', {
-		\ 'branch': 'next',
-		\ 'do': 'bash install.sh',
-		\ }
+    "Plug 'SirVer/ultisnips'
+    Plug 'Shougo/neosnippet.vim'
+    Plug 'Shougo/neosnippet-snippets'
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+    Plug 'w0rp/ale'
+    Plug 'autozimu/LanguageClient-neovim', {
+                \ 'branch': 'next',
+                \ 'do': 'bash install.sh',
+                \ }
 else
-	Plug 'Shougo/neocomplete.vim'
-	Plug 'scrooloose/syntastic'
+    Plug 'Shougo/neocomplete.vim'
+    Plug 'scrooloose/syntastic'
 endif
 Plug 'rust-lang/rust.vim'
 "Plug 'racer-rust/vim-racer'
@@ -61,7 +65,7 @@ call plug#end()
 set nocompatible
 
 if &t_Co > 2 || has("gui_running")
-	syntax on
+    syntax on
 endif
 
 "256 color terminal
@@ -93,9 +97,10 @@ set shiftwidth=4
 set softtabstop=0
 set smarttab
 set et
+"set textwidth=80
 
 if has("nvim")
-	set icm=nosplit
+    set icm=nosplit
 endif
 
 "highlight tabs as >--, and trailing whitespace with -, spaw with .
@@ -161,7 +166,7 @@ set ttimeout          " for key codes
 set ttimeoutlen=10    " unnoticeable small value
 
 "ignore whitespace in diffs (messes up Gdiff)
-set diffopt+=iwhite
+"set diffopt+=iwhite
 
 filetype plugin indent on
 filetype plugin on
@@ -250,7 +255,7 @@ onoremap <expr> <CR> empty(&buftype) ? '}' : '<CR>'
 vnoremap <CR> }
 
 if has("nvim")
-	tnoremap <Esc> <C-\><C-n>
+    tnoremap <Esc> <C-\><C-n>
 endif
 
 "jk to go to normal mode
@@ -282,10 +287,10 @@ augroup END
 " Use substitute() instead of printf() to handle '%%s' modeline in LaTeX
 " files.
 function! AppendModeline()
-  let l:modeline = printf(" vim: set ts=%d sw=%d tw=%d %set :",
-        \ &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no')
-  let l:modeline = substitute(&commentstring, "%s", l:modeline, "")
-  call append(line("$"), l:modeline)
+    let l:modeline = printf(" vim: set ts=%d sw=%d tw=%d %set :",
+                \ &tabstop, &shiftwidth, &textwidth, &expandtab ? '' : 'no')
+    let l:modeline = substitute(&commentstring, "%s", l:modeline, "")
+    call append(line("$"), l:modeline)
 endfunction
 nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
 
@@ -309,12 +314,12 @@ nnoremap <leader>b :Buffers<cr>
 "emacs like shortcuts for yankstack
 if has("nvim")
 else
-	set <m-p>=p   " rotate yanks forward
-	set <m-P>=P   " rotate yanks forward
+    set <m-p>=p   " rotate yanks forward
+    set <m-P>=P   " rotate yanks forward
 endif
 
 "custom trigger for snippets
-let g:UltiSnipsExpandTrigger="<c-a>"
+"let g:UltiSnipsExpandTrigger="<c-a>"
 
 "syntastic checkers
 "let g:syntastic_python_checkers = ['pylint']
@@ -374,24 +379,25 @@ let g:airline_mode_map = {
 
 "enable completion
 if has("nvim")
-	let g:deoplete#enable_at_startup = 1
+    let g:deoplete#enable_at_startup = 1
 else
-	let g:neocomplete#enable_at_startup = 1
+    let g:neocomplete#enable_at_startup = 1
 endif
 
 command! -nargs=* -complete=file Rg GrepperRg <args>
 
 let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rls'],
-    \ 'python': ['pyls'],
-    \ 'cpp': ['cquery', '--log-file=/tmp/cq.log'],
-    \ 'c': ['cquery', '--log-file=/tmp/cq.log'],
-    \ }
+            \ 'rust': ['rls'],
+            \ 'python': ['pyls'],
+            \ 'cpp': ['ccls', '--log-file=/tmp/cq.log'],
+            \ 'c': ['ccls', '--log-file=/tmp/cq.log'],
+            \ }
 
 let g:LanguageClient_diagnosticsList="Location"
 let g:LanguageClient_loadSettings = 1
 let g:LanguageClient_settingsPath = '~/.vim/settings.json'
 let g:LanguageClient_autoStart = 1
+autocmd FileType c let g:LanguageClient_autoStart = 0
 
 nnoremap <F9> :call LanguageClient_contextMenu()<CR>
 
@@ -407,37 +413,14 @@ let g:AutoPairsMapCR=0
 imap jk <Esc>
 imap kj <Esc>
 
-"""""""
-" fix from: https://github.com/autozimu/LanguageClient-neovim/issues/379
-function! ExpandLspSnippet()
-    call UltiSnips#ExpandSnippetOrJump()
-    if !pumvisible() || empty(v:completed_item)
-        return ''
-    endif
+"let g:clang_use_library=1
+"let g:clang_library_path='/usr/lib/llvm-3.8/lib/libclang-3.8.so.1'
+"let g:clang_auto_user_options='compile_commands.json'
+let NERDTreeIgnore=['\.o$', '\.so$', '\~$']
 
-    " only expand Lsp if UltiSnips#ExpandSnippetOrJump not effect.
-    let l:value = v:completed_item['word']
-    let l:matched = len(l:value)
-    if l:matched <= 0
-        return ''
-    endif
-
-    " remove inserted chars before expand snippet
-    if col('.') == col('$')
-        let l:matched -= 1
-        exec 'normal! ' . l:matched . 'Xx'
-    else
-        exec 'normal! ' . l:matched . 'X'
-    endif
-
-    if col('.') == col('$') - 1
-        " move to $ if at the end of line.
-        call cursor(line('.'), col('$'))
-    endif
-
-    " expand snippet now.
-    call UltiSnips#Anon(l:value)
-    return ''
-endfunction
-
-imap <C-k> <C-R>=ExpandLspSnippet()<CR>
+let g:ale_linters = {
+            \   'rust': ['rls'],
+            \}
+imap <C-a>     <Plug>(neosnippet_expand_or_jump)
+smap <C-a>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-a>     <Plug>(neosnippet_expand_target)
