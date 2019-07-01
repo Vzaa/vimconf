@@ -295,8 +295,8 @@ endfunction
 nnoremap <silent> <Leader>ml :call AppendModeline()<CR>
 
 "auto close info buffer thing after completion
-autocmd CursorMovedI * if pumvisible() == 0|pclose|endif
-autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+autocmd CursorMovedI * if !bufexists("[Command Line]") && pumvisible() == 0|pclose|endif
+autocmd InsertLeave * if !bufexists("[Command Line]") && pumvisible() == 0|pclose|endif
 
 "plugin related configs start here
 
@@ -389,8 +389,8 @@ command! -nargs=* -complete=file Rg GrepperRg <args>
 let g:LanguageClient_serverCommands = {
             \ 'rust': ['rls'],
             \ 'python': ['pyls'],
-            \ 'cpp': ['ccls', '--log-file=/tmp/cq.log'],
-            \ 'c': ['ccls', '--log-file=/tmp/cq.log'],
+            \ 'cpp': ['clangd'],
+            \ 'c': ['clangd'],
             \ }
 
 let g:LanguageClient_diagnosticsList="Location"
