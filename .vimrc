@@ -421,6 +421,12 @@ let NERDTreeIgnore=['\.o$', '\.so$', '\~$']
 let g:ale_linters = {
             \   'rust': ['rls'],
             \}
+
+let g:ale_completion_enabled = 0
+
+"let g:ale_rust_rls_toolchain="stable"
+"let g:ale_set_highlights=1
+let g:LanguageClient_useVirtualText=0
 imap <C-a>     <Plug>(neosnippet_expand_or_jump)
 smap <C-a>     <Plug>(neosnippet_expand_or_jump)
 xmap <C-a>     <Plug>(neosnippet_expand_target)
