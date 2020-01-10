@@ -48,6 +48,7 @@ endif
 Plug 'rust-lang/rust.vim'
 "Plug 'racer-rust/vim-racer'
 Plug 'itchyny/vim-cursorword'
+Plug 'liuchengxu/vim-clap', { 'do': function('clap#helper#build_all') }
 "Plug 'Yggdroot/indentLine'
 "Plug 'Rip-Rip/clang_complete'
 "Plugin 'rdnetto/YCM-Generator'
@@ -304,12 +305,13 @@ nnoremap <F6> :NERDTreeToggle<CR>
 nnoremap <F7> :UndotreeToggle<CR>
 "nmap <F8> :TagbarToggle<CR>
 
-nnoremap <c-p> :FZF<cr>
+nnoremap <c-p> :Clap files<cr>
 nnoremap <leader>l :BTags<cr>
 nnoremap <leader>L :Tags<cr>
-nnoremap <leader>f :BLines<cr>
-nnoremap <leader>F :Lines<cr>
-nnoremap <leader>b :Buffers<cr>
+nnoremap <leader>f :Clap blines<cr>
+nnoremap <leader>F :Clap lines<cr>
+nnoremap <leader>b :Clap buffers<cr>
+nnoremap <leader>g :Clap grep<cr>
 
 "emacs like shortcuts for yankstack
 if has("nvim")
@@ -393,9 +395,6 @@ let g:LanguageClient_serverCommands = {
             \ 'c': ['clangd'],
             \ }
 
-let g:LanguageClient_diagnosticsList="Location"
-let g:LanguageClient_loadSettings = 1
-let g:LanguageClient_settingsPath = '~/.vim/settings.json'
 let g:LanguageClient_autoStart = 1
 autocmd FileType c let g:LanguageClient_autoStart = 0
 
@@ -418,6 +417,8 @@ imap kj <Esc>
 "let g:clang_auto_user_options='compile_commands.json'
 let NERDTreeIgnore=['\.o$', '\.so$', '\~$']
 
+"let g:ale_virtualtext_cursor=1
+
 let g:ale_linters = {
             \   'rust': ['rls'],
             \}
@@ -426,7 +427,9 @@ let g:ale_completion_enabled = 0
 
 "let g:ale_rust_rls_toolchain="stable"
 "let g:ale_set_highlights=1
-let g:LanguageClient_useVirtualText=0
+"let g:LanguageClient_useVirtualText=0
+command! PrettyPrintJSON %!python3 -m json.tool
+
 imap <C-a>     <Plug>(neosnippet_expand_or_jump)
 smap <C-a>     <Plug>(neosnippet_expand_or_jump)
 xmap <C-a>     <Plug>(neosnippet_expand_target)
