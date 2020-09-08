@@ -1,64 +1,38 @@
-" Specify a directory for plugins (for Neovim: ~/.local/share/nvim/plugged)
 call plug#begin('~/.vim/plugged')
 
-Plug 'tpope/vim-fugitive'
+" Theme
 Plug 'morhetz/gruvbox'
-"Plug 'freeo/vim-kalisi'
-"Plug 'kien/ctrlp.vim'
+
+" Plugins
+Plug 'airblade/vim-gitgutter'
+Plug 'honza/vim-snippets'
+Plug 'itchyny/lightline.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'scrooloose/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'honza/vim-snippets'
-Plug 'scrooloose/nerdcommenter'
-Plug 'mbbill/undotree'
-Plug 'Lokaltog/vim-easymotion'
-Plug 'pangloss/vim-javascript'
-Plug 'godlygeek/tabular'
-" Plug 'matchit.zip'
-Plug 'vim-scripts/a.vim'
-Plug 'xolox/vim-misc'
-"Plug 'majutsushi/tagbar'
-Plug 'mhinz/vim-grepper'
-Plug 'airblade/vim-gitgutter'
 Plug 'maxbrunsfeld/vim-yankstack'
-Plug 'tpope/vim-surround'
-"Plug 'tpope/vim-dispatch'
-Plug 'wellle/tmux-complete.vim'
+Plug 'mbbill/undotree'
+Plug 'mhinz/vim-grepper'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'ntpeters/vim-better-whitespace'
-Plug 'leafgarland/typescript-vim'
-Plug 'posva/vim-vue'
-"Plug 'jiangmiao/auto-pairs'
-if has("nvim")
-    "Plug 'SirVer/ultisnips'
-    Plug 'Shougo/neosnippet.vim'
-    Plug 'Shougo/neosnippet-snippets'
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-    Plug 'w0rp/ale'
-    Plug 'autozimu/LanguageClient-neovim', {
-                \ 'branch': 'next',
-                \ 'do': 'bash install.sh',
-                \ }
-else
-    Plug 'Shougo/neocomplete.vim'
-    Plug 'scrooloose/syntastic'
-endif
+Plug 'scrooloose/nerdcommenter'
+Plug 'scrooloose/nerdtree'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-surround'
+Plug 'vim-scripts/a.vim'
+Plug 'wellle/tmux-complete.vim'
+
+" Language specific plugins
 Plug 'rust-lang/rust.vim'
-"Plug 'racer-rust/vim-racer'
-Plug 'itchyny/vim-cursorword'
-Plug 'liuchengxu/vim-clap', { 'do': function('clap#helper#build_all') }
-"Plug 'Yggdroot/indentLine'
-"Plug 'Rip-Rip/clang_complete'
-"Plugin 'rdnetto/YCM-Generator'
-"Plugin 'vim-scripts/L9'
-"Plugin 'bling/vim-bufferline.git'
-"Plugin 'Valloric/YouCompleteMe'
-"Plugin 'Raimondi/delimitMate'
-"Plug 'rhysd/vim-clang-format'
-"Plug 'artur-shaik/vim-javacomplete2'
-"Plug 'zchee/deoplete-jedi'
+Plug 'leafgarland/typescript-vim'
+Plug 'pangloss/vim-javascript'
+Plug 'posva/vim-vue'
+
+" Old stuff
+"Plug 'godlygeek/tabular'
+"Plug 'Lokaltog/vim-easymotion'
+"Plug 'tpope/vim-dispatch'
+"Plug 'jiangmiao/auto-pairs'
+"Plug 'itchyny/vim-cursorword'
 
 call plug#end()
 """""""""""""""""""""""""""""""
@@ -172,6 +146,13 @@ set ttimeoutlen=10    " unnoticeable small value
 filetype plugin indent on
 filetype plugin on
 set ofu=syntaxcomplete#Complete
+
+set completeopt=longest,menuone
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
+  \ '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
+inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
+  \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
 
 "config cscope
 set nosplitright
@@ -303,133 +284,117 @@ autocmd InsertLeave * if !bufexists("[Command Line]") && pumvisible() == 0|pclos
 
 nnoremap <F6> :NERDTreeToggle<CR>
 nnoremap <F7> :UndotreeToggle<CR>
-"nmap <F8> :TagbarToggle<CR>
 
-nnoremap <c-p> :Clap files<cr>
-nnoremap <leader>l :BTags<cr>
-nnoremap <leader>L :Tags<cr>
-nnoremap <leader>f :Clap blines<cr>
-nnoremap <leader>F :Clap lines<cr>
-nnoremap <leader>b :Clap buffers<cr>
-nnoremap <leader>g :Clap grep<cr>
+nnoremap <c-p> :Files<cr>
+nnoremap <leader>l :BLines<cr>
+nnoremap <leader>L :Lines<cr>
+nnoremap <leader>b :Buffers<cr>
+nnoremap <leader>g :Rgg<cr>
+nnoremap <leader>c :Rgc<cr>
 
-"emacs like shortcuts for yankstack
+
+" ripgrep stuff
+command! -bang -nargs=* Rgg
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
+  \   fzf#vim#with_preview(), <bang>0)
+
+command! -bang -nargs=* Rgc
+  \ call fzf#vim#grep(
+  \   'rg -tc --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
+  \   fzf#vim#with_preview(), <bang>0)
+command! -nargs=* -complete=file Rg GrepperRg <args>
+
 if has("nvim")
 else
+"emacs like shortcuts for yankstack
     set <m-p>=p   " rotate yanks forward
     set <m-P>=P   " rotate yanks forward
 endif
 
-"custom trigger for snippets
-"let g:UltiSnipsExpandTrigger="<c-a>"
-
-"syntastic checkers
-"let g:syntastic_python_checkers = ['pylint']
-"let g:syntastic_python_checkers = ['pyflakes']
-"let g:syntastic_python_checkers = ['pyflakes']
-"let g:syntastic_python_checkers = ['pep8']
-
-"let g:syntastic_jslint_checkers=['jslint']
-"let g:syntastic_jslint_checkers=['jshint']
-
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 1
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 0
-
-"easytags stuff
-"set tags=~/.vimtags
-"let g:easytags_events = ['BufWritePost']
-"let g:easytags_async = 1
-"let g:easytags_dynamic_files = 2
-"let g:easytags_resolve_links = 1
-"let g:easytags_suppress_ctags_warning = 1
-"""""
-
-"vim-airline stuff
-"uncomment for regular fonts
-"let g:airline_powerline_fonts = 1
-
-"show file name without the path
-"let g:airline_section_c = '%t'
-
-"disable whitespace check
-let g:airline#extensions#whitespace#enabled = 0
-let g:airline#extensions#hunks#enabled = 0
-
-"show only column number and percentage
-let g:airline_section_z = '%3p%% %3v'
-let g:airline_theme = 'light'
-let g:airline_mode_map = {
-            \ '__' : '-',
-            \ 'n'  : 'N',
-            \ 'i'  : 'I',
-            \ 'R'  : 'R',
-            \ 'c'  : 'C',
-            \ 'v'  : 'V',
-            \ 'V'  : 'V',
-            \ '' : 'V',
-            \ 's'  : 'S',
-            \ 'S'  : 'S',
-            \ '' : 'S',
-            \ }
-"""""
-
-"enable completion
-if has("nvim")
-    let g:deoplete#enable_at_startup = 1
-else
-    let g:neocomplete#enable_at_startup = 1
-endif
-
-command! -nargs=* -complete=file Rg GrepperRg <args>
-
-let g:LanguageClient_serverCommands = {
-            \ 'rust': ['rls'],
-            \ 'python': ['pyls'],
-            \ 'cpp': ['clangd'],
-            \ 'c': ['clangd'],
-            \ }
-
-let g:LanguageClient_autoStart = 1
-autocmd FileType c let g:LanguageClient_autoStart = 0
-
-nnoremap <F9> :call LanguageClient_contextMenu()<CR>
-
-autocmd FileType rust nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-autocmd FileType rust nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-autocmd FileType python nnoremap <silent> K :call LanguageClient#textDocument_hover()<CR>
-autocmd FileType python nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-
-" AutoPairs stuff
-let g:AutoPairsShortcutToggle = '<M-o>'
-let g:AutoPairsMapCR=0
 
 imap jk <Esc>
 imap kj <Esc>
 
-"let g:clang_use_library=1
-"let g:clang_library_path='/usr/lib/llvm-3.8/lib/libclang-3.8.so.1'
-"let g:clang_auto_user_options='compile_commands.json'
 let NERDTreeIgnore=['\.o$', '\.so$', '\~$']
 
-"let g:ale_virtualtext_cursor=1
-
-let g:ale_linters = {
-            \   'rust': ['rls'],
-            \}
-
-let g:ale_completion_enabled = 0
-
-"let g:ale_rust_rls_toolchain="stable"
-"let g:ale_set_highlights=1
-"let g:LanguageClient_useVirtualText=0
 command! PrettyPrintJSON %!python3 -m json.tool
 
-imap <C-a>     <Plug>(neosnippet_expand_or_jump)
-smap <C-a>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-a>     <Plug>(neosnippet_expand_target)
+"CoC Stuff
+
+"custom trigger for snippets
+imap <C-a> <Plug>(coc-snippets-expand)
+vmap <C-j> <Plug>(coc-snippets-select)
+let g:coc_snippet_next = '<c-j>'
+let g:coc_snippet_prev = '<c-k>'
+
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
+
+" Formatting selected code.
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder.
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
+
+" Applying codeAction to the selected region.
+" Example: `<leader>aap` for current paragraph
+xmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+
+" Remap keys for applying codeAction to the current buffer.
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Apply AutoFix to problem on the current line.
+nmap <leader>qf  <Plug>(coc-fix-current)
+
+" Use CTRL-S for selections ranges.
+" Requires 'textDocument/selectionRange' support of LS, ex: coc-tsserver
+nmap <silent> <C-s> <Plug>(coc-range-select)
+xmap <silent> <C-s> <Plug>(coc-range-select)
+
+" Add `:Format` command to format current buffer.
+command! -nargs=0 Format :call CocAction('format')
+
+set cmdheight=2
+
+" lightline cfg
+let g:lightline = {
+    \ 'colorscheme': 'powerline',
+    \ 'active': {
+    \   'left': [ [ 'mode', 'paste' ],
+    \             [ 'gitbranch', 'cocstatus', 'readonly', 'filename', 'modified' ] ]
+    \ },
+    \ 'component_function': {
+    \   'cocstatus': 'coc#status',
+    \   'gitbranch': 'FugitiveHead'
+    \ },
+    \ }
