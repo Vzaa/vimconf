@@ -1,7 +1,7 @@
 local kmap = vim.api.nvim_set_keymap
 
 -- Set completeopt to have a better completion experience
-vim.o.completeopt = 'menuone,noinsert'
+vim.o.completeopt = 'menuone,noselect'
 
 -- Compe setup
 require('compe').setup {
