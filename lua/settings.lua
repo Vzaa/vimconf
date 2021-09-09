@@ -57,9 +57,9 @@ vim.cmd [[highlight! link CursorLineNr Highlighted]]
 vim.cmd [[command! -nargs=* -complete=file Rg GrepperRg <args>]]
 vim.cmd [[command! PrettyPrintJSON %!python3 -m json.tool]]
 
-vim.g.history = 10000
-vim.g.gdefault = true
-vim.g.cinoptions = ':0,l1,t0,g0,(0'
+vim.o.history = 10000
+vim.o.gdefault = true
+vim.o.cinoptions = ':0,l1,t0,g0,(0'
 
 -- Highlight on yank
 vim.api.nvim_exec(
