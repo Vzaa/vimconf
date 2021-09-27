@@ -50,6 +50,7 @@ end)
 
 require('gitsigns').setup()
 require('nvim-autopairs').setup()
+require('nvim-tree').setup()
 
 require('settings')
 require('lsp')

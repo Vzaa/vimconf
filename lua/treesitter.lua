@@ -2,6 +2,7 @@ require('nvim-treesitter.configs').setup {
   ensure_installed = "maintained",
   highlight = {
     enable = true, -- false will disable the whole extension
+    disable = { "xml" }
   },
   incremental_selection = {
     enable = true,
@@ -13,7 +14,7 @@ require('nvim-treesitter.configs').setup {
     },
   },
   indent = {
-    enable = true,
+    enable = false,
   },
   textobjects = {
     swap = {
@@ -45,7 +46,7 @@ require('nvim-treesitter.configs').setup {
       },
       goto_next_end = {
         [']M'] = '@function.outer',
-        [']['] = '@class.outer',
+        -- [']['] = '@class.outer',
       },
       goto_previous_start = {
         ['[m'] = '@function.outer',
