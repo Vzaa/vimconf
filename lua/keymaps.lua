@@ -49,3 +49,7 @@ kmap('n', '<leader>?', [[<cmd>lua require('telescope.builtin').oldfiles()<CR>]],
 kmap('n', '<leader><space>', ':noh<cr>', kopt)
 kmap('n', '<leader>w', [[:%s/\s\+$//<cr>:let @/=''<CR>]], kopt)
 
+kmap('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', kopt)
+kmap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', kopt)
+kmap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', kopt)
+kmap('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', kopt)
