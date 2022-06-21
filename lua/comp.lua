@@ -11,7 +11,15 @@ cmp.setup {
   sources = {
     { name = 'nvim_lsp' },
     { name = 'ultisnips' },
-    { name = 'tmux' }
+    { name = 'path' },
+    { name = 'cmdline' },
+    { name = 'buffer' },
+    {
+      name = 'tmux',
+      option = {
+        all_panes = true,
+      }
+    }
   },
   mapping = {
     ['<C-p>'] = cmp.mapping.select_prev_item(),

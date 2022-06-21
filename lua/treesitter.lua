@@ -1,8 +1,8 @@
 require('nvim-treesitter.configs').setup {
-  ensure_installed = "maintained",
+  ensure_installed = "all",
   highlight = {
     enable = true, -- false will disable the whole extension
-    disable = { "xml" }
+    disable = { "xml", "phpdoc" }
   },
   incremental_selection = {
     enable = true,

@@ -53,3 +53,6 @@ kmap('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', kopt)
 kmap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', kopt)
 kmap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', kopt)
 kmap('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', kopt)
+
+kmap('n', ']c', "&diff ? ']c' : '<cmd>Gitsigns next_hunk<CR>'", {expr=true})
+kmap('n', '[c', "&diff ? '[c' : '<cmd>Gitsigns prev_hunk<CR>'", {expr=true})

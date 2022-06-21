@@ -5,15 +5,8 @@ if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
   vim.fn.execute('!git clone https://github.com/wbthomason/packer.nvim ' .. install_path)
 end
 
-vim.api.nvim_exec(
-  [[
-  augroup Packer
-    autocmd!
-    autocmd BufWritePost init.lua PackerCompile
-  augroup end
-]],
-  false
-)
+local packer_group = vim.api.nvim_create_augroup('Packer', { clear = true })
+vim.api.nvim_create_autocmd('BufWritePost', { command = 'source <afile> | PackerCompile', group = packer_group, pattern = 'init.lua' })
 
 local use = require('packer').use
 require('packer').startup(function()
@@ -21,8 +14,13 @@ require('packer').startup(function()
   use 'tpope/vim-fugitive' -- Git commands in nvim
   use 'tpope/vim-commentary' -- "gc" to comment visual regions/lines
   -- UI to select things (files, grep results, open buffers...)
-  use { 'nvim-telescope/telescope.nvim', requires = { { 'nvim-lua/plenary.nvim' } } }
+  use {
+    'nvim-telescope/telescope.nvim',
+    requires = { {'nvim-lua/plenary.nvim'} }
+  }
   use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
+  use {'nvim-telescope/telescope-ui-select.nvim' }
+
   use 'itchyny/lightline.vim' -- Fancier statusline
   -- Add git related info in the signs columns and popups
   use { 'lewis6991/gitsigns.nvim', requires = { 'nvim-lua/plenary.nvim' } }
@@ -31,9 +29,14 @@ require('packer').startup(function()
   -- Additional textobjects for treesitter
   use 'nvim-treesitter/nvim-treesitter-textobjects'
   use 'neovim/nvim-lspconfig' -- Collection of configurations for built-in LSP client
+
+  -- nvim-cmp stuff
   use 'hrsh7th/nvim-cmp' -- Autocompletion plugin
   use 'hrsh7th/cmp-nvim-lsp'
+  use 'hrsh7th/cmp-path'
+  use 'hrsh7th/cmp-cmdline'
   use 'quangnguyen30192/cmp-nvim-ultisnips'
+  use 'andersevenrud/cmp-tmux'
 
   use 'windwp/nvim-autopairs'
   use 'mbbill/undotree'
@@ -46,7 +49,6 @@ require('packer').startup(function()
   use 'SirVer/ultisnips'
   use 'honza/vim-snippets'
   use 'morhetz/gruvbox'
-  use 'andersevenrud/cmp-tmux'
   use 'tpope/vim-sleuth'
   use 'ziglang/zig.vim'
 end)
@@ -61,10 +63,11 @@ require('telescope').setup {
       override_generic_sorter = true,  -- override the generic sorter
       override_file_sorter = true,     -- override the file sorter
       case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
-    }
+    },
   }
 }
 require('telescope').load_extension('fzf')
+require("telescope").load_extension("ui-select")
 
 require('settings')
 require('lsp')

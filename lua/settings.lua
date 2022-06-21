@@ -33,7 +33,7 @@ vim.cmd [[colorscheme gruvbox]]
 vim.g.lightline = {
   colorscheme = 'gruvbox',
   active = { left = { { 'mode', 'paste' }, { 'gitbranch', 'readonly', 'filename', 'modified' } } },
-  component_function = { gitbranch = 'fugitive#head' },
+  component_function = { gitbranch = 'FugitiveHead' },
 }
 
 --Save undo history
@@ -44,9 +44,9 @@ vim.cmd [[set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp]]
 vim.cmd [[set undodir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp]]
 
 -- do not wrap searches at the end of the files
-vim.cmd [[set nowrapscan]]
+vim.o.wrapscan = false
 -- start scrolling at 3rd row
-vim.cmd [[set scrolloff=3]]
+vim.o.scrolloff = 3
 --highlight tabs as >--, and trailing whitespace with -, spaw with .
 vim.cmd [[set listchars=tab:>-,trail:-]]
 vim.cmd [[set list]]
@@ -55,19 +55,19 @@ vim.cmd [[highlight Highlighted ctermfg=231 ctermbg=24 cterm=NONE]]
 vim.cmd [[highlight! link CursorLineNr Highlighted]]
 -- Rg/PrettyPrintJSON
 vim.cmd [[command! -nargs=* -complete=file Rg GrepperRg <args>]]
-vim.cmd [[command! PrettyPrintJSON %!python3 -m json.tool]]
+vim.api.nvim_create_user_command("PrettyPrintJSON", "%!python3 -m json.tool", {})
 
 vim.o.history = 10000
 vim.o.gdefault = true
 vim.o.cinoptions = ':0,l1,t0,g0,(0'
+vim.o.laststatus = 3
 
 -- Highlight on yank
-vim.api.nvim_exec(
-  [[
-  augroup YankHighlight
-    autocmd!
-    autocmd TextYankPost * silent! lua vim.highlight.on_yank()
-  augroup end
-]],
-  false
-)
+local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
+vim.api.nvim_create_autocmd('TextYankPost', {
+  callback = function()
+    vim.highlight.on_yank()
+  end,
+  group = highlight_group,
+  pattern = '*',
+})
