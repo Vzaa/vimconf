@@ -29,13 +29,6 @@ vim.wo.signcolumn = 'yes'
 vim.o.termguicolors = true
 vim.cmd [[colorscheme gruvbox]]
 
---Set statusbar
-vim.g.lightline = {
-  colorscheme = 'gruvbox',
-  active = { left = { { 'mode', 'paste' }, { 'gitbranch', 'readonly', 'filename', 'modified' } } },
-  component_function = { gitbranch = 'FugitiveHead' },
-}
-
 --Save undo history
 vim.cmd [[set undofile]]
 vim.cmd [[set backup]]
