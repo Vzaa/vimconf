@@ -30,10 +30,7 @@ require('packer').startup(function(use)
     end,
   }
   -- Additional textobjects for treesitter
-  use { -- Additional text objects via treesitter
-    'nvim-treesitter/nvim-treesitter-textobjects',
-    after = 'nvim-treesitter',
-  }
+  use 'nvim-treesitter/nvim-treesitter-textobjects'
   use 'neovim/nvim-lspconfig' -- Collection of configurations for built-in LSP client
   use 'lukas-reineke/indent-blankline.nvim' -- Add indentation guides even on blank lines
   use 'williamboman/mason.nvim' -- Manage external editor tooling i.e LSP servers
