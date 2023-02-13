@@ -18,8 +18,10 @@ local on_attach = function(_, bufnr)
   vim.keymap.set('n', '<leader>so', require('telescope.builtin').lsp_document_symbols, opts)
   vim.keymap.set('n', '<leader>ss', require('telescope.builtin').lsp_workspace_symbols, opts)
   vim.api.nvim_buf_create_user_command(bufnr, 'Format', function()
-    if vim.lsp.buf.format then vim.lsp.buf.format()
-    elseif vim.lsp.buf.formatting then vim.lsp.buf.formatting()
+    if vim.lsp.buf.format then
+      vim.lsp.buf.format()
+    elseif vim.lsp.buf.formatting then
+      vim.lsp.buf.formatting()
     end
   end, { desc = 'Format current buffer with LSP' })
 end
@@ -29,16 +31,16 @@ end
 capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 -- Enable the following language servers
-local servers = { 'clangd', 'pyright', 'zls', 'sumneko_lua', 'rust_analyzer'}
+local servers = { 'clangd', 'pyright', 'zls', 'lua_ls', 'rust_analyzer' }
 
 require('mason-lspconfig').setup {
-  ensure_installed = servers,
+    ensure_installed = servers,
 }
 
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
-    on_attach = on_attach,
-    capabilities = capabilities,
+      on_attach = on_attach,
+      capabilities = capabilities,
   }
 end
 
@@ -48,46 +50,46 @@ local runtime_path = vim.split(package.path, ';')
 table.insert(runtime_path, 'lua/?.lua')
 table.insert(runtime_path, 'lua/?/init.lua')
 
-require('lspconfig').sumneko_lua.setup {
-  cmd = { 'lua-language-server' },
-  on_attach = on_attach,
-  capabilities = capabilities,
-  settings = {
-    Lua = {
-      runtime = {
-        -- Tell the language server which version of Lua you're using (most likely LuaJIT)
-        version = 'LuaJIT',
-        -- Setup your lua path
-        path = runtime_path,
-      },
-      diagnostics = {
-        globals = { 'vim' },
-      },
-      workspace = { library = vim.api.nvim_get_runtime_file('', true) },
-      -- Do not send telemetry data containing a randomized but unique identifier
-      telemetry = { enable = false, },
+require('lspconfig').lua_ls.setup {
+    cmd = { 'lua-language-server' },
+    on_attach = on_attach,
+    capabilities = capabilities,
+    settings = {
+        Lua = {
+            runtime = {
+                -- Tell the language server which version of Lua you're using (most likely LuaJIT)
+                version = 'LuaJIT',
+                -- Setup your lua path
+                path = runtime_path,
+            },
+            diagnostics = {
+                globals = { 'vim' },
+            },
+            workspace = { library = vim.api.nvim_get_runtime_file('', true) },
+            -- Do not send telemetry data containing a randomized but unique identifier
+            telemetry = { enable = false, },
+        },
     },
-  },
 }
 
 nvim_lsp.rust_analyzer.setup({
-  on_attach = on_attach,
-  settings = {
-    ["rust-analyzer"] = {
-      imports = {
-        granularity = {
-          group = "module",
-        },
-        prefix = "self",
-      },
-      cargo = {
-        buildScripts = {
-          enable = true,
-        },
-      },
-      procMacro = {
-        enable = true
-      },
+    on_attach = on_attach,
+    settings = {
+        ["rust-analyzer"] = {
+            imports = {
+                granularity = {
+                    group = "module",
+                },
+                prefix = "self",
+            },
+            cargo = {
+                buildScripts = {
+                    enable = true,
+                },
+            },
+            procMacro = {
+                enable = true
+            },
+        }
     }
-  }
 })

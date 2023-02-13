@@ -13,8 +13,8 @@ require('packer').startup(function(use)
   use 'tpope/vim-commentary' -- "gc" to comment visual regions/lines
   -- UI to select things (files, grep results, open buffers...)
   use {
-    'nvim-telescope/telescope.nvim', branch = '0.1.x',
-    requires = { { 'nvim-lua/plenary.nvim' } }
+      'nvim-telescope/telescope.nvim', branch = '0.1.x',
+      requires = { { 'nvim-lua/plenary.nvim' } }
   }
   use { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
   use { 'nvim-telescope/telescope-ui-select.nvim' }
@@ -24,10 +24,10 @@ require('packer').startup(function(use)
   use { 'lewis6991/gitsigns.nvim', requires = { 'nvim-lua/plenary.nvim' } }
   -- Highlight, edit, and navigate code using a fast incremental parsing library
   use { -- Highlight, edit, and navigate code
-    'nvim-treesitter/nvim-treesitter',
-    run = function()
-      pcall(require('nvim-treesitter.install').update { with_sync = true })
-    end,
+      'nvim-treesitter/nvim-treesitter',
+      run = function()
+        pcall(require('nvim-treesitter.install').update { with_sync = true })
+      end,
   }
   -- Additional textobjects for treesitter
   use 'nvim-treesitter/nvim-treesitter-textobjects'
@@ -58,6 +58,15 @@ require('packer').startup(function(use)
   use 'morhetz/gruvbox'
   use 'tpope/vim-sleuth'
   use 'ziglang/zig.vim'
+  use { "rcarriga/nvim-dap-ui", requires = { "mfussenegger/nvim-dap" } }
+  use {
+      "folke/trouble.nvim",
+      requires = "nvim-tree/nvim-web-devicons",
+      config = function()
+        require("trouble").setup {
+        }
+      end
+  }
 
   if is_bootstrap then
     require('packer').sync()
@@ -68,14 +77,18 @@ require('gitsigns').setup()
 require('nvim-autopairs').setup()
 require('nvim-tree').setup()
 require('telescope').setup {
-  extensions = {
-    fzf = {
-      fuzzy = true, -- false will only do exact matching
-      override_generic_sorter = true, -- override the generic sorter
-      override_file_sorter = true, -- override the file sorter
-      case_mode = "smart_case", -- or "ignore_case" or "respect_case"
+    defaults = {
+        layout_strategy = 'vertical',
+        layout_config = { height = 0.95 },
     },
-  }
+    extensions = {
+        fzf = {
+            fuzzy = true, -- false will only do exact matching
+            override_generic_sorter = true, -- override the generic sorter
+            override_file_sorter = true, -- override the file sorter
+            case_mode = "smart_case", -- or "ignore_case" or "respect_case"
+        },
+    }
 }
 require('telescope').load_extension('fzf')
 require("telescope").load_extension("ui-select")
@@ -84,15 +97,46 @@ require("telescope").load_extension("ui-select")
 require('mason').setup()
 
 require('lualine').setup {
-  options = {
-    icons_enabled = false,
-    theme = 'gruvbox',
-    component_separators = '|',
-    section_separators = '',
-  },
+    options = {
+        icons_enabled = false,
+        theme = 'gruvbox',
+        component_separators = '|',
+        section_separators = '',
+    },
 }
 require('settings')
 require('lsp')
 require('comp')
 require('treesitter')
 require('keymaps')
+
+local dap = require('dap')
+
+dap.adapters.codelldb = {
+    type = 'server',
+    port = '13000',
+    executable = {
+        command = 'codelldb',
+        args = { '--port', '13000' },
+    },
+}
+
+dap.configurations.c = {
+    {
+        type = "codelldb",
+        request = "launch",
+        cwd = '${workspaceFolder}',
+        terminal = 'integrated',
+        console = 'integratedTerminal',
+        stopOnEntry = false,
+        program = function()
+          -- want it in cmdline, without callback. so fn.input better than ui.input
+          return vim.fn.input('executable: ', vim.loop.cwd() .. '/', 'file')
+        end
+    }
+}
+dap.configurations.cpp = dap.configurations.c
+dap.configurations.rust = dap.configurations.cpp
+dap.configurations.zig = dap.configurations.cpp
+
+require("dapui").setup()
