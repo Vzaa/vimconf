@@ -27,7 +27,6 @@ vim.wo.signcolumn = 'yes'
 
 --Set colorscheme (order is important here)
 vim.o.termguicolors = true
-vim.cmd [[colorscheme gruvbox]]
 
 --Save undo history
 vim.cmd [[set undofile]]

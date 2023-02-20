@@ -26,70 +26,40 @@ local on_attach = function(_, bufnr)
   end, { desc = 'Format current buffer with LSP' })
 end
 
--- local capabilities = vim.lsp.protocol.make_client_capabilities()
--- capabilities.textDocument.completion.completionItem.snippetSupport = true
-capabilities = require('cmp_nvim_lsp').default_capabilities()
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 
 -- Enable the following language servers
-local servers = { 'clangd', 'pyright', 'zls', 'lua_ls', 'rust_analyzer' }
-
-require('mason-lspconfig').setup {
-    ensure_installed = servers,
-}
-
-for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup {
-      on_attach = on_attach,
-      capabilities = capabilities,
-  }
-end
-
--- Example custom server
--- Make runtime files discoverable to the server
-local runtime_path = vim.split(package.path, ';')
-table.insert(runtime_path, 'lua/?.lua')
-table.insert(runtime_path, 'lua/?/init.lua')
-
-require('lspconfig').lua_ls.setup {
-    cmd = { 'lua-language-server' },
-    on_attach = on_attach,
-    capabilities = capabilities,
-    settings = {
-        Lua = {
-            runtime = {
-                -- Tell the language server which version of Lua you're using (most likely LuaJIT)
-                version = 'LuaJIT',
-                -- Setup your lua path
-                path = runtime_path,
-            },
-            diagnostics = {
-                globals = { 'vim' },
-            },
-            workspace = { library = vim.api.nvim_get_runtime_file('', true) },
-            -- Do not send telemetry data containing a randomized but unique identifier
-            telemetry = { enable = false, },
-        },
+local servers = {
+  -- clangd = {},
+  rust_analyzer = {},
+  zls = {},
+  lua_ls = {
+    Lua = {
+      workspace = { checkThirdParty = false },
+      telemetry = { enable = false },
     },
+  },
 }
 
-nvim_lsp.rust_analyzer.setup({
-    on_attach = on_attach,
-    settings = {
-        ["rust-analyzer"] = {
-            imports = {
-                granularity = {
-                    group = "module",
-                },
-                prefix = "self",
-            },
-            cargo = {
-                buildScripts = {
-                    enable = true,
-                },
-            },
-            procMacro = {
-                enable = true
-            },
-        }
+local mason_lspconfig = require 'mason-lspconfig'
+
+mason_lspconfig.setup {
+  -- ensure_installed = vim.tbl_keys(servers),
+}
+
+mason_lspconfig.setup_handlers {
+  function(server_name)
+    require('lspconfig')[server_name].setup {
+      capabilities = capabilities,
+      on_attach = on_attach,
+      settings = servers[server_name],
     }
-})
+  end,
+}
+
+require('lspconfig')['clangd'].setup {
+  capabilities = capabilities,
+  on_attach = on_attach,
+  settings = {}
+}

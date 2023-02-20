@@ -1,10 +1,11 @@
 local kmap = vim.api.nvim_set_keymap
 local kopt = { noremap = true, silent = true }
 
-kmap('', ',', '<Nop>', { noremap = true, silent = true })
-vim.g.mapleader = ','
-vim.g.maplocalleader = ','
+-- kmap('', ',', '<Nop>', { noremap = true, silent = true })
+-- vim.g.mapleader = ','
+-- vim.g.maplocalleader = ','
 
+kmap('n', 'Y', 'yy', kopt)
 --Remap for dealing with word wrap
 kmap('n', 'k', "v:count == 0 ? 'gk' : 'k'", { noremap = true, expr = true, silent = true })
 kmap('n', 'j', "v:count == 0 ? 'gj' : 'j'", { noremap = true, expr = true, silent = true })
