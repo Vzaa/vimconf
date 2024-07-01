@@ -1,5 +1,14 @@
---Incremental live completion
-vim.o.inccommand = 'nosplit'
+-- Show which line your cursor is on
+vim.opt.cursorline = true
+
+-- Set to true if you have a Nerd Font installed and selected in the terminal
+vim.g.have_nerd_font = true
+
+-- Don't show the mode, since it's already in the status line
+vim.opt.showmode = false
+
+-- Preview substitutions live, as you type!
+vim.opt.inccommand = 'split'
 
 --Set highlight on search
 vim.o.hlsearch = true
@@ -23,14 +32,15 @@ vim.o.smartcase = true
 
 --Decrease update time
 vim.o.updatetime = 250
+vim.o.timeoutlen = 300
 vim.wo.signcolumn = 'yes'
 
 --Set colorscheme (order is important here)
 vim.o.termguicolors = true
 
 --Save undo history
-vim.cmd [[set undofile]]
-vim.cmd [[set backup]]
+vim.o.undofile = true
+vim.o.backup = true
 vim.cmd [[set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp]]
 vim.cmd [[set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp]]
 vim.cmd [[set undodir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp]]
@@ -39,9 +49,11 @@ vim.cmd [[set undodir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp]]
 vim.o.wrapscan = false
 -- start scrolling at 3rd row
 vim.o.scrolloff = 3
---highlight tabs as >--, and trailing whitespace with -, spaw with .
-vim.cmd [[set listchars=tab:>-,trail:-]]
-vim.cmd [[set list]]
+-- Sets how neovim will display certain whitespace characters in the editor.
+--  See `:help 'list'`
+--  and `:help 'listchars'`
+vim.opt.list = true
+vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 -- Y dis not work
 vim.cmd [[highlight Highlighted ctermfg=231 ctermbg=24 cterm=NONE]]
 vim.cmd [[highlight! link CursorLineNr Highlighted]]
@@ -55,11 +67,10 @@ vim.o.cinoptions = ':0,l1,t0,g0,(0'
 vim.o.laststatus = 3
 
 -- Highlight on yank
-local highlight_group = vim.api.nvim_create_augroup('YankHighlight', { clear = true })
 vim.api.nvim_create_autocmd('TextYankPost', {
+  desc = 'Highlight when yanking (copying) text',
+  group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
   callback = function()
     vim.highlight.on_yank()
   end,
-  group = highlight_group,
-  pattern = '*',
 })

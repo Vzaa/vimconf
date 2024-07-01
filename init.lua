@@ -23,7 +23,7 @@ require('lazy').setup({
             vim.cmd([[colorscheme gruvbox]])
         end,
     },
-    'tpope/vim-commentary',
+    -- 'tpope/vim-commentary',
     'tpope/vim-fugitive',
     'tpope/vim-rhubarb',
     'tpope/vim-sleuth',
@@ -39,7 +39,17 @@ require('lazy').setup({
     { 'windwp/nvim-autopairs',    opts = {} },
     { 'kyazdani42/nvim-tree.lua', opts = {} },
     { 'lewis6991/gitsigns.nvim',  opts = {} },
-    { "rcarriga/nvim-dap-ui",     dependencies = { "mfussenegger/nvim-dap" } },
+    {
+        'mfussenegger/nvim-dap',
+        dependencies = {
+            'rcarriga/nvim-dap-ui',
+            'nvim-neotest/nvim-nio',
+
+            -- Installs the debug adapters for you
+            'williamboman/mason.nvim',
+            'jay-babu/mason-nvim-dap.nvim',
+        },
+    },
     {
         "folke/trouble.nvim",
         dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -49,8 +59,9 @@ require('lazy').setup({
     {
         'neovim/nvim-lspconfig',
         dependencies = {
-            'williamboman/mason.nvim',
+            'williamboman/mason.nvim', config = true,
             'williamboman/mason-lspconfig.nvim',
+            { 'folke/neodev.nvim', opts = {} },
         },
     },
 
@@ -95,38 +106,66 @@ require('lazy').setup({
 
     {
         'lukas-reineke/indent-blankline.nvim',
+        tag = 'v2.20.8',
         opts = {
             char = '┊',
             show_trailing_blankline_indent = false,
         },
     },
-    {
+    { -- Fuzzy Finder (files, lsp, etc)
         'nvim-telescope/telescope.nvim',
+        event = 'VimEnter',
         branch = '0.1.x',
-        dependencies = { 'nvim-lua/plenary.nvim', 'nvim-telescope/telescope-ui-select.nvim' }
-    },
-    {
-        'nvim-telescope/telescope-fzf-native.nvim',
-        build = 'make',
-        cond = function()
-            return vim.fn.executable 'make' == 1
+        dependencies = {
+            'nvim-lua/plenary.nvim',
+            { -- If encountering errors, see telescope-fzf-native README for installation instructions
+                'nvim-telescope/telescope-fzf-native.nvim',
+
+                -- `build` is used to run some command when the plugin is installed/updated.
+                -- This is only run then, not every time Neovim starts up.
+                build = 'make',
+
+                -- `cond` is a condition used to determine whether this plugin should be
+                -- installed and loaded.
+                cond = function()
+                    return vim.fn.executable 'make' == 1
+                end,
+            },
+            { 'nvim-telescope/telescope-ui-select.nvim' },
+
+            -- Useful for getting pretty icons, but requires a Nerd Font.
+            { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+            {
+                "nvim-telescope/telescope-live-grep-args.nvim" ,
+                -- This will not install any breaking changes.
+                -- For major updates, this must be adjusted manually.
+                version = "^1.0.0",
+            },
+        },
+        config = function()
+            require('telescope').setup {
+                extensions = {
+                    ['ui-select'] = {
+                        require('telescope.themes').get_dropdown(),
+                    },
+                },
+            }
+
+            -- Enable Telescope extensions if they are installed
+            pcall(require('telescope').load_extension, 'fzf')
+            pcall(require('telescope').load_extension, 'ui-select')
         end,
     },
-
     {
+        -- Highlight, edit, and navigate code
         'nvim-treesitter/nvim-treesitter',
         dependencies = {
             'nvim-treesitter/nvim-treesitter-textobjects',
         },
-        config = function()
-            pcall(require('nvim-treesitter.install').update { with_sync = true })
-        end,
+        build = ':TSUpdate',
     },
     -- { import = 'custom.plugins' },
 }, {})
-
-require('telescope').load_extension('fzf')
-require('telescope').load_extension('ui-select')
 
 -- Setup mason so it can manage external tooling
 require('mason').setup()
@@ -138,6 +177,23 @@ require('treesitter')
 require('keymaps')
 
 local dap = require('dap')
+local dapui = require 'dapui'
+
+require('mason-nvim-dap').setup {
+    -- Makes a best effort to setup the various debuggers with
+    -- reasonable debug configurations
+    automatic_setup = true,
+
+    -- You can provide additional configuration to the handlers,
+    -- see mason-nvim-dap README for more information
+    handlers = {},
+
+    -- You'll need to check that you have the required things installed
+    -- online, please don't ask me how to install them :)
+    ensure_installed = {
+        -- Update this to ensure that you have the debuggers for the langs you want
+    },
+}
 
 dap.adapters.codelldb = {
     type = 'server',
@@ -166,4 +222,36 @@ dap.configurations.cpp = dap.configurations.c
 dap.configurations.rust = dap.configurations.cpp
 dap.configurations.zig = dap.configurations.cpp
 
-require("dapui").setup()
+-- Basic debugging keymaps, feel free to change to your liking!
+vim.keymap.set('n', '<F5>', dap.continue, { desc = 'Debug: Start/Continue' })
+vim.keymap.set('n', '<F1>', dap.step_into, { desc = 'Debug: Step Into' })
+vim.keymap.set('n', '<F2>', dap.step_over, { desc = 'Debug: Step Over' })
+vim.keymap.set('n', '<F3>', dap.step_out, { desc = 'Debug: Step Out' })
+vim.keymap.set('n', '<F4>', dap.toggle_breakpoint, { desc = 'Debug: Toggle Breakpoint' })
+vim.keymap.set('n', '<leader>B', function()
+    dap.set_breakpoint(vim.fn.input 'Breakpoint condition: ')
+end, { desc = 'Debug: Set Breakpoint' })
+
+dapui.setup {
+    -- Set icons to characters that are more likely to work in every terminal.
+    --    Feel free to remove or use ones that you like more! :)
+    --    Don't feel like these are good choices.
+    icons = { expanded = '▾', collapsed = '▸', current_frame = '*' },
+    controls = {
+        icons = {
+            pause = '⏸',
+            play = '▶',
+            step_into = '⏎',
+            step_over = '⏭',
+            step_out = '⏮',
+            step_back = 'b',
+            run_last = '▶▶',
+            terminate = '⏹',
+            disconnect = '⏏',
+        },
+    },
+}
+vim.keymap.set('n', '<F7>', dapui.toggle, { desc = 'Debug: See last session result.' })
+dap.listeners.after.event_initialized['dapui_config'] = dapui.open
+dap.listeners.before.event_terminated['dapui_config'] = dapui.close
+dap.listeners.before.event_exited['dapui_config'] = dapui.close

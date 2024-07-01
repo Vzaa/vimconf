@@ -40,18 +40,22 @@ kmap('n', '<F7>', ':UndotreeToggle<cr>', kopt)
 
 kmap('n', '<space>', '<C-^>', kopt)
 
+
+-- kmap('n', '<c-up>', 'ddP', kopt)
+-- kmap('n', '<c-down>', 'ddp', kopt)
+
 -- telescope
 kmap('n', '<c-p>', '<cmd>Telescope find_files<cr>', kopt)
-kmap('n', '<leader>g', '<cmd>Telescope live_grep<cr>', kopt)
 kmap('n', '<leader>b', '<cmd>Telescope buffers<cr>', kopt)
 kmap('n', '<leader>x', '<cmd>Telescope command_history<cr>', kopt)
+kmap('n', '<leader>W', '<cmd>Telescope grep_string<cr>', kopt)
 kmap('n', '<leader>?', [[<cmd>lua require('telescope.builtin').oldfiles()<CR>]], kopt)
 kmap('n', '<leader><space>', ':noh<cr>', kopt)
 kmap('n', '<leader>w', [[:%s/\s\+$//<cr>:let @/=''<CR>]], kopt)
 
-kmap('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', kopt)
-kmap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', kopt)
-kmap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', kopt)
+-- kmap('n', '<leader>e', '<cmd>lua vim.diagnostic.open_float()<CR>', kopt)
+-- kmap('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<CR>', kopt)
+-- kmap('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<CR>', kopt)
 kmap('n', '<leader>q', '<cmd>lua vim.diagnostic.setloclist()<CR>', kopt)
 
 kmap('n', ']c', "&diff ? ']c' : '<cmd>Gitsigns next_hunk<CR>'", { expr = true })
@@ -63,3 +67,5 @@ vim.keymap.set('n', '<leader>l', function()
     previewer = false,
   })
 end, { desc = '[/] Fuzzily search in current buffer]' })
+
+vim.keymap.set("n", "<leader>g", ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>")
