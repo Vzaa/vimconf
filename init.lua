@@ -61,7 +61,7 @@ require('lazy').setup({
         dependencies = {
             'williamboman/mason.nvim', config = true,
             'williamboman/mason-lspconfig.nvim',
-            { 'folke/neodev.nvim', opts = {} },
+            -- { 'folke/neodev.nvim', opts = {} },
         },
     },
 
@@ -163,6 +163,37 @@ require('lazy').setup({
             'nvim-treesitter/nvim-treesitter-textobjects',
         },
         build = ':TSUpdate',
+    },
+    {
+        -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
+        -- used for completion, annotations and signatures of Neovim apis
+        'folke/lazydev.nvim',
+        ft = 'lua',
+        opts = {
+            library = {
+                -- Load luvit types when the `vim.uv` word is found
+                { path = 'luvit-meta/library', words = { 'vim%.uv' } },
+            },
+        },
+    },
+    { -- Collection of various small independent plugins/modules
+        'echasnovski/mini.nvim',
+        config = function()
+            -- Better Around/Inside textobjects
+            --
+            -- Examples:
+            --  - va)  - [V]isually select [A]round [)]paren
+            --  - yinq - [Y]ank [I]nside [N]ext [Q]uote
+            --  - ci'  - [C]hange [I]nside [']quote
+            require('mini.ai').setup { n_lines = 500 }
+
+            -- Add/delete/replace surroundings (brackets, quotes, etc.)
+            --
+            -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
+            -- - sd'   - [S]urround [D]elete [']quotes
+            -- - sr)'  - [S]urround [R]eplace [)] [']
+            require('mini.surround').setup()
+        end,
     },
     -- { import = 'custom.plugins' },
 }, {})
